@@ -40,17 +40,17 @@ nameOverride: ""
 # @section -- General Settings
 # @default -- ""
 fullnameOverride: ""
-# -- Name of the K8s cluster. Used by SigNoz OtelCollectors to attach to telemetry data.
+# -- Name of the K8s cluster. Used by Hanzo O11y OtelCollectors to attach to telemetry data.
 # @section -- General Settings
 # @default -- ""
 clusterName: ""
-# -- Image Registry Secret Names for all SigNoz components.
+# -- Image Registry Secret Names for all Hanzo O11y components.
 # If `global.imagePullSecrets` is set, it will be merged with this list.
 # This has lower precedence than `imagePullSecrets` at the individual component level.
 # @section -- General Settings
 # @default -- []
 imagePullSecrets: []
-# - "signoz-pull-secret"
+# - "o11y-pull-secret"
 
 # clickhouse -- Clickhouse default values. For a complete list of configurations, check `values.yaml` of the upstream `clickhouse` chart.
 # @default -- "Check out the clickhouse chart for default values"
@@ -74,11 +74,11 @@ clickhouse:
     enabled: true
     # clickhouse.zookeeper.podAnnotations -- Annotations for the Zookeeper pod.
     # @section -- Zookeeper Settings
-    # @default -- { signoz.io/scrape: "true", signoz.io/port: "9141", signoz.io/path: "/metrics" }
+    # @default -- { o11y.hanzo.ai/scrape: "true", o11y.hanzo.ai/port: "9141", o11y.hanzo.ai/path: "/metrics" }
     podAnnotations:
-      signoz.io/scrape: "true"
-      signoz.io/port: "9141"
-      signoz.io/path: "/metrics"
+      o11y.hanzo.ai/scrape: "true"
+      o11y.hanzo.ai/port: "9141"
+      o11y.hanzo.ai/path: "/metrics"
     # clickhouse.zookeeper.metrics -- Zookeeper metrics settings.
     # @section -- Zookeeper Settings
     # @default -- { enabled: true }
@@ -128,8 +128,8 @@ clickhouse:
       registry: *GLOBAL_IMAGE_REGISTRY
       # clickhouse.zookeeper.image.repository -- Zookeeper image repository to use.
       # @default -- "bitnami/zookeeper"
-      repository: signoz/zookeeper
-      # clickhouse.zookeeper.image.tag -- Zookeeper image tag. SigNoz ClickHouse does not support all versions of Zookeeper.
+      repository: ghcr.io/hanzoai/zookeeper
+      # clickhouse.zookeeper.image.tag -- Zookeeper image tag. Hanzo O11y ClickHouse does not support all versions of Zookeeper.
       # Please override the default only if you know what you are doing.
       # @default -- "3.7.1"
       tag: 3.7.1
@@ -165,22 +165,22 @@ clickhouse:
   # @section -- ClickHouse Settings
   # @default -- "cluster"
   cluster: cluster
-  # clickhouse.database -- ClickHouse Settings for SigNoz Metrics.
+  # clickhouse.database -- ClickHouse Settings for Hanzo O11y Metrics.
   # @section -- ClickHouse Settings
-  # @default -- "signoz_metrics"
-  database: signoz_metrics
-  # clickhouse.traceDatabase -- ClickHouse Settings for SigNoz Traces.
+  # @default -- "o11y_metrics"
+  database: o11y_metrics
+  # clickhouse.traceDatabase -- ClickHouse Settings for Hanzo O11y Traces.
   # @section -- ClickHouse Settings
-  # @default -- "signoz_traces"
-  traceDatabase: signoz_traces
-  # clickhouse.logDatabase -- ClickHouse Settings for SigNoz Logs.
+  # @default -- "o11y_traces"
+  traceDatabase: o11y_traces
+  # clickhouse.logDatabase -- ClickHouse Settings for Hanzo O11y Logs.
   # @section -- ClickHouse Settings
-  # @default -- "signoz_logs"
-  logDatabase: signoz_logs
-  # clickhouse.meterDatabase -- Clickhouse meter Database (SigNoz Meter)
+  # @default -- "o11y_logs"
+  logDatabase: o11y_logs
+  # clickhouse.meterDatabase -- Clickhouse meter Database (Hanzo O11y Meter)
   # @section -- ClickHouse Settings
-  # @default -- "signoz_meter"
-  meterDatabase: signoz_meter
+  # @default -- "o11y_meter"
+  meterDatabase: o11y_meter
   # clickhouse.user -- ClickHouse user.
   # @section -- ClickHouse Settings
   # @default -- "admin"
@@ -196,9 +196,9 @@ clickhouse:
     # @default -- "docker.io"
     registry: docker.io
     # clickhouse.image.repository -- ClickHouse image repository to use.
-    # @default -- "clickhouse/clickhouse-server"
-    repository: clickhouse/clickhouse-server
-    # clickhouse.image.tag -- ClickHouse image tag to use. SigNoz is not always tested with the latest version of ClickHouse.
+    # @default -- "ghcr.io/hanzoai/datastore"
+    repository: ghcr.io/hanzoai/datastore
+    # clickhouse.image.tag -- ClickHouse image tag to use. Hanzo O11y is not always tested with the latest version of ClickHouse.
     # Only override if you know what you are doing.
     # @default -- "25.5.6"
     tag: 25.5.6
@@ -255,7 +255,7 @@ clickhouse:
   # @default -- {}
   externalZookeeper: {}
   # servers:
-  # - host: signoz-signoz-zookeeper
+  # - host: o11y-o11y-zookeeper
   #   port: 2181
 
   # clickhouse.nodeSelector -- Node selector for assigning the ClickHouse pod.
@@ -364,7 +364,7 @@ clickhouse:
           node_arch=$(uname -m | sed s/aarch64/arm64/ | sed s/x86_64/amd64/)
           echo "Fetching histogram-binary for ${node_os}/${node_arch}"
           cd /tmp
-          wget -O histogram-quantile.tar.gz "https://github.com/SigNoz/signoz/releases/download/histogram-quantile%2F${version}/histogram-quantile_${node_os}_${node_arch}.tar.gz"
+          wget -O histogram-quantile.tar.gz "https://github.com/Hanzo O11y/o11y/releases/download/histogram-quantile%2F${version}/histogram-quantile_${node_os}_${node_arch}.tar.gz"
           tar -xzf histogram-quantile.tar.gz
           chmod +x histogram-quantile
           mv histogram-quantile /var/lib/clickhouse/user_scripts/histogramQuantile
@@ -381,7 +381,7 @@ clickhouse:
         - -c
         - |
           set -e
-          until curl -s -o /dev/null http://signoz-clickhouse:8123/
+          until curl -s -o /dev/null http://o11y-datastore:8123/
           do sleep 1
           done
   # clickhouse.layout -- ClickHouse cluster layout. (Experimental, use at own risk)
@@ -412,11 +412,11 @@ clickhouse:
     user_defined_executable_functions_config: '/etc/clickhouse-server/functions/custom-functions.xml'
   # clickhouse.podAnnotations -- Annotations for the ClickHouse pod(s).
   # @section -- ClickHouse Settings
-  # @default -- { signoz.io/scrape: "true", signoz.io/port: "9363", signoz.io/path: "/metrics" }
+  # @default -- { o11y.hanzo.ai/scrape: "true", o11y.hanzo.ai/port: "9363", o11y.hanzo.ai/path: "/metrics" }
   podAnnotations:
-    signoz.io/scrape: 'true'
-    signoz.io/port: '9363'
-    signoz.io/path: /metrics
+    o11y.hanzo.ai/scrape: 'true'
+    o11y.hanzo.ai/port: '9363'
+    o11y.hanzo.ai/path: /metrics
   # clickhouse.podDistribution -- Topologies for distributing the ClickHouse pods.
   # Possible values can be found here: https://github.com/Altinity/clickhouse-operator/blob/1414503921da3ae475eb6f9a296d3475a6993768/docs/chi-examples/99-clickhouseinstallation-max.yaml#L428-L481
   # @section -- ClickHouse Settings
@@ -655,10 +655,10 @@ clickhouse:
       flushInterval: 7500
     # clickhouse.clickhouseOperator.podAnnotations -- ClickHouse Operator pod annotations.
     # @section -- ClickHouse Operator
-    # @default -- { signoz.io/port: "8888", signoz.io/scrape: "true" }
+    # @default -- { o11y.hanzo.ai/port: "8888", o11y.hanzo.ai/scrape: "true" }
     podAnnotations:
-      signoz.io/port: '8888'
-      signoz.io/scrape: 'true'
+      o11y.hanzo.ai/port: '8888'
+      o11y.hanzo.ai/scrape: 'true'
     # clickhouse.clickhouseOperator.nodeSelector -- ClickHouse Operator node selector.
     # @section -- ClickHouse Operator Scheduling
     # @default -- {}
@@ -706,17 +706,17 @@ externalClickhouse:
   # @default -- "cluster"
   cluster: cluster
   # externalClickhouse.database - Database name for the external cluster.
-  # @default -- "signoz_metrics"
-  database: signoz_metrics
-  # externalClickhouse.traceDatabase - Database name for SigNoz Traces on the external cluster.
-  # @default -- "signoz_traces"
-  traceDatabase: signoz_traces
-  # externalClickhouse.logDatabase - Database name for SigNoz Logs on the external cluster.
-  # @default -- "signoz_logs"
-  logDatabase: signoz_logs
-  # externalClickhouse.meterDatabase - Database name for SigNoz Meter on the external cluster.
-  # @default -- "signoz_meter"
-  meterDatabase: signoz_meter
+  # @default -- "o11y_metrics"
+  database: o11y_metrics
+  # externalClickhouse.traceDatabase - Database name for Hanzo O11y Traces on the external cluster.
+  # @default -- "o11y_traces"
+  traceDatabase: o11y_traces
+  # externalClickhouse.logDatabase - Database name for Hanzo O11y Logs on the external cluster.
+  # @default -- "o11y_logs"
+  logDatabase: o11y_logs
+  # externalClickhouse.meterDatabase - Database name for Hanzo O11y Meter on the external cluster.
+  # @default -- "o11y_meter"
+  meterDatabase: o11y_meter
   # externalClickhouse.user - Username to connect to the external cluster.
   # @default -- ""
   user: ""
@@ -741,91 +741,91 @@ externalClickhouse:
   # externalClickhouse.tcpPort - TCP port of the external ClickHouse instance.
   # @default - 9000
   tcpPort: 9000
-# signoz -- Default values for SigNoz.
-# @section -- SigNoz
+# o11y -- Default values for Hanzo O11y.
+# @section -- Hanzo O11y
 # @default -- "Please checkout the default values in values.yml"
-signoz:
-  # signoz.name -- The name of the SigNoz component.
-  # @default -- "signoz"
-  # @section -- SigNoz
-  name: "signoz"
-  # signoz.replicaCount -- The number of pod replicas for SigNoz.
+o11y:
+  # o11y.name -- The name of the Hanzo O11y component.
+  # @default -- "o11y"
+  # @section -- Hanzo O11y
+  name: "o11y"
+  # o11y.replicaCount -- The number of pod replicas for Hanzo O11y.
   # @default -- 1
-  # @section -- SigNoz
+  # @section -- Hanzo O11y
   replicaCount: 1
-  # signoz.image -- Image configuration for SigNoz.
-  # @section -- SigNoz
+  # o11y.image -- Image configuration for Hanzo O11y.
+  # @section -- Hanzo O11y
   image:
-    # signoz.image.registry - The container image registry.
+    # o11y.image.registry - The container image registry.
     # @default -- "docker.io"
-    # @section -- SigNoz
+    # @section -- Hanzo O11y
     registry: docker.io
-    # signoz.image.repository - The container image repository.
-    # @default -- "signoz/signoz"
-    repository: signoz/signoz
-    # signoz.image.tag - The container image tag.
+    # o11y.image.repository - The container image repository.
+    # @default -- "ghcr.io/hanzoai/o11y"
+    repository: ghcr.io/hanzoai/o11y
+    # o11y.image.tag - The container image tag.
     # @default -- "v0.110.1"
     tag: v0.115.0
-    # signoz.image.pullPolicy - The image pull policy.
+    # o11y.image.pullPolicy - The image pull policy.
     # @default -- "IfNotPresent"
     pullPolicy: IfNotPresent
-  # signoz.imagePullSecrets -- Image pull secrets for SigNoz.
+  # o11y.imagePullSecrets -- Image pull secrets for Hanzo O11y.
   # This has higher precedence than the root level or global value.
-  # @section -- SigNoz
+  # @section -- Hanzo O11y
   # @default -- []
   imagePullSecrets: []
-  # signoz.serviceAccount -- Service Account configuration for SigNoz.
-  # @section -- SigNoz
+  # o11y.serviceAccount -- Service Account configuration for Hanzo O11y.
+  # @section -- Hanzo O11y
   serviceAccount:
-    # signoz.serviceAccount.create - Specifies whether a service account should be created.
+    # o11y.serviceAccount.create - Specifies whether a service account should be created.
     # @default -- true
     create: true
-    # signoz.serviceAccount.annotations - Annotations to add to the service account.
+    # o11y.serviceAccount.annotations - Annotations to add to the service account.
     # @default -- {}
     annotations: {}
-    # signoz.serviceAccount.name - The name of the service account to use. If not set and `create` is true, a name is generated.
+    # o11y.serviceAccount.name - The name of the service account to use. If not set and `create` is true, a name is generated.
     # @default -- null
     name:
-  # signoz.service -- Service configuration for SigNoz.
-  # This allows you to configure how SigNoz is exposed within the Kubernetes cluster.
-  # @section -- SigNoz Networking
+  # o11y.service -- Service configuration for Hanzo O11y.
+  # This allows you to configure how Hanzo O11y is exposed within the Kubernetes cluster.
+  # @section -- Hanzo O11y Networking
   service:
-    # signoz.service.annotations - Annotations for the SigNoz service object.
+    # o11y.service.annotations - Annotations for the Hanzo O11y service object.
     # @default -- {}
     annotations: {}
-    # signoz.service.labels - Labels for the SigNoz service object.
+    # o11y.service.labels - Labels for the Hanzo O11y service object.
     # @default -- {}
     labels: {}
-    # signoz.service.type - The service type (`ClusterIP`, `NodePort`, `LoadBalancer`).
+    # o11y.service.type - The service type (`ClusterIP`, `NodePort`, `LoadBalancer`).
     # @default -- "ClusterIP"
     type: ClusterIP
-    # signoz.service.port - The external HTTP port for SigNoz.
+    # o11y.service.port - The external HTTP port for Hanzo O11y.
     # @default -- 8080
     port: 8080
-    # signoz.service.internalPort - The internal gRPC port for SigNoz.
+    # o11y.service.internalPort - The internal gRPC port for Hanzo O11y.
     # @default -- 8085
     internalPort: 8085
-    # signoz.service.opampPort - The internal OpAMP port for SigNoz.
+    # o11y.service.opampPort - The internal OpAMP port for Hanzo O11y.
     # @default -- 4320
     opampPort: 4320
-    # signoz.service.nodePort - Manually specify the nodePort for HTTP when `service.type` is `NodePort`.
+    # o11y.service.nodePort - Manually specify the nodePort for HTTP when `service.type` is `NodePort`.
     # @default -- null
     nodePort: null
-    # signoz.service.internalNodePort - Manually specify the nodePort for the internal port when `service.type` is `NodePort`.
+    # o11y.service.internalNodePort - Manually specify the nodePort for the internal port when `service.type` is `NodePort`.
     # @default -- null
     internalNodePort: null
-    # signoz.service.opampInternalNodePort - Manually specify the nodePort for OpAMP when `service.type` is `NodePort`.
+    # o11y.service.opampInternalNodePort - Manually specify the nodePort for OpAMP when `service.type` is `NodePort`.
     # @default -- null
     opampInternalNodePort: null
-  # signoz.annotations -- Annotations for the SigNoz pod.
-  # @section -- SigNoz
+  # o11y.annotations -- Annotations for the Hanzo O11y pod.
+  # @section -- Hanzo O11y
   # @default -- null
   annotations:
-  # signoz.additionalArgs -- Additional command-line arguments for SigNoz.
-  # @section -- SigNoz
+  # o11y.additionalArgs -- Additional command-line arguments for Hanzo O11y.
+  # @section -- Hanzo O11y
   # @default -- []
   additionalArgs: []
-  # Environment variables for the SigNoz.
+  # Environment variables for the Hanzo O11y.
   # You can specify variables in two ways:
   # 1. Flexible structure for advanced configurations (recommended):
   #    Example:
@@ -842,38 +842,38 @@ signoz:
   #      env:
   #        MY_KEY: my-value
 
-  # signoz.env -- Environment variables for SigNoz.
-  # Refer to the official documentation for a complete list: https://github.com/SigNoz/signoz/blob/main/conf/example.yaml
+  # o11y.env -- Environment variables for Hanzo O11y.
+  # Refer to the official documentation for a complete list: https://github.com/Hanzo O11y/o11y/blob/main/conf/example.yaml
   # Note on Variable Naming: Environment variables are derived from the YAML configuration.
   # For example, a key `provider` under the `telemetry_store` section becomes
-  # `signoz_telemetrystore_provider`.
-  # @section -- SigNoz
+  # `o11y_telemetrystore_provider`.
+  # @section -- Hanzo O11y
   env:
-    signoz_telemetrystore_provider: clickhouse
+    o11y_telemetrystore_provider: clickhouse
     # ClickHouse URL is set and applied internally. Don't override unless you know what you are doing.
-    # signoz_telemetrystore_clickhouse_dsn: tcp://clickhouse_operator:clickhouse_operator_password@my-release-clickhouse:9000/signoz_traces
+    # o11y_telemetrystore_clickhouse_dsn: tcp://clickhouse_operator:clickhouse_operator_password@my-release-clickhouse:9000/o11y_traces
 
-    # Enable SMTP for user invitations. For more details see: https://signoz.io/docs/manage/administrator-guide/configuration/smtp-email-invitations/
-    signoz_emailing_enabled: false
+    # Enable SMTP for user invitations. For more details see: https://o11y.hanzo.ai/docs/manage/administrator-guide/configuration/smtp-email-invitations/
+    o11y_emailing_enabled: false
     # To enable/disable the active query tracker.
-    signoz_prometheus_active__query__tracker_enabled: false
-    # signoz alertemanager configuration
-    # For more details see: https://signoz.io/docs/manage/administrator-guide/configuration/alertmanager/
-    signoz_alertmanager_provider: signoz
+    o11y_prometheus_active__query__tracker_enabled: false
+    # o11y alertemanager configuration
+    # For more details see: https://o11y.hanzo.ai/docs/manage/administrator-guide/configuration/alertmanager/
+    o11y_alertmanager_provider: o11y
     # The URL under which Alertmanager is externally reachable, Used for generating relative and absolute links back to Alertmanager itself.
-    signoz_alertmanager_signoz_external__url: http://localhost:8080
-  # signoz.podSecurityContext -- Pod-level security context.
-  # @section -- SigNoz
+    o11y_alertmanager_o11y_external__url: http://localhost:8080
+  # o11y.podSecurityContext -- Pod-level security context.
+  # @section -- Hanzo O11y
   # @default -- {}
   podSecurityContext: {}
   # fsGroup: 2000
 
-  # signoz.podAnnotations -- Annotations for the SigNoz pod.
-  # @section -- SigNoz
+  # o11y.podAnnotations -- Annotations for the Hanzo O11y pod.
+  # @section -- Hanzo O11y
   # @default -- {}
   podAnnotations: {}
-  # signoz.securityContext -- Container-level security context.
-  # @section -- SigNoz
+  # o11y.securityContext -- Container-level security context.
+  # @section -- Hanzo O11y
   # @default -- {}
   securityContext: {}
   # capabilities:
@@ -883,16 +883,16 @@ signoz:
   # runAsNonRoot: true
   # runAsUser: 1000
 
-  # signoz.additionalVolumeMounts -- Additional volume mounts for the SigNoz container.
-  # @section -- SigNoz
+  # o11y.additionalVolumeMounts -- Additional volume mounts for the Hanzo O11y container.
+  # @section -- Hanzo O11y
   # @default -- []
   additionalVolumeMounts: []
-  # signoz.additionalVolumes -- Additional volumes for the SigNoz pod.
-  # @section -- SigNoz
+  # o11y.additionalVolumes -- Additional volumes for the Hanzo O11y pod.
+  # @section -- Hanzo O11y
   # @default -- []
   additionalVolumes: []
-  # signoz.livenessProbe -- Liveness probe configuration.
-  # @section -- SigNoz
+  # o11y.livenessProbe -- Liveness probe configuration.
+  # @section -- Hanzo O11y
   # @default -- "Please checkout the default values in values.yml"
   livenessProbe:
     enabled: true
@@ -903,8 +903,8 @@ signoz:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  # signoz.readinessProbe -- Readiness probe configuration.
-  # @section -- SigNoz
+  # o11y.readinessProbe -- Readiness probe configuration.
+  # @section -- Hanzo O11y
   # @default -- "Please checkout the default values in values.yml"
   readinessProbe:
     enabled: true
@@ -915,47 +915,47 @@ signoz:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  # signoz.customLivenessProbe -- Custom liveness probe to override the default.
-  # @section -- SigNoz
+  # o11y.customLivenessProbe -- Custom liveness probe to override the default.
+  # @section -- Hanzo O11y
   # @default -- {}
   customLivenessProbe: {}
-  # signoz.customReadinessProbe -- Custom readiness probe to override the default.
-  # @section -- SigNoz
+  # o11y.customReadinessProbe -- Custom readiness probe to override the default.
+  # @section -- Hanzo O11y
   # @default -- {}
   customReadinessProbe: {}
-  # signoz.ingress -- (object) Ingress configuration for SigNoz.
-  # @section -- SigNoz Networking
+  # o11y.ingress -- (object) Ingress configuration for Hanzo O11y.
+  # @section -- Hanzo O11y Networking
   ingress:
-    # signoz.ingress.enabled - Enable ingress controller resource.
+    # o11y.ingress.enabled - Enable ingress controller resource.
     # @default -- false
     enabled: false
-    # signoz.ingress.className - Ingress class name.
+    # o11y.ingress.className - Ingress class name.
     # @default -- ""
     className: ""
-    # signoz.ingress.annotations - Annotations for the ingress resource.
+    # o11y.ingress.annotations - Annotations for the ingress resource.
     # @default -- {}
     annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
     # cert-manager.io/cluster-issuer: letsencrypt-prod
-    # signoz.ingress.hosts - Hostname and path configurations for the ingress.
-    # @section -- SigNoz Networking
+    # o11y.ingress.hosts - Hostname and path configurations for the ingress.
+    # @section -- Hanzo O11y Networking
     hosts:
-      - host: signoz.domain.com
+      - host: o11y.domain.com
         paths:
           - path: /
             pathType: ImplementationSpecific
             port: 8080
-    # signoz.ingress.tls - TLS configuration for the ingress.
+    # o11y.ingress.tls - TLS configuration for the ingress.
     # @default -- []
-    # @section -- SigNoz Networking
+    # @section -- Hanzo O11y Networking
     tls: []
     #  - secretName: chart-example-tls
     #    hosts:
-    #      - signoz.domain.com
-  # signoz.resources -- Resource requests and limits.
+    #      - o11y.domain.com
+  # o11y.resources -- Resource requests and limits.
   # Ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  # @section -- SigNoz
+  # @section -- Hanzo O11y
   # @default -- '{ requests: { cpu: "100m", memory: "100Mi" } }'
   resources:
     requests:
@@ -965,43 +965,43 @@ signoz:
   #     cpu: 750m
   #     memory: 1000Mi
 
-  # signoz.priorityClassName -- Priority class for the SigNoz pods.
-  # @section -- SigNoz
+  # o11y.priorityClassName -- Priority class for the Hanzo O11y pods.
+  # @section -- Hanzo O11y
   # @default -- ""
   priorityClassName: ""
-  # signoz.nodeSelector -- Node selector for pod assignment.
-  # @section -- SigNoz
+  # o11y.nodeSelector -- Node selector for pod assignment.
+  # @section -- Hanzo O11y
   # @default -- {}
   nodeSelector: {}
-  # signoz.tolerations -- Tolerations for pod assignment.
-  # @section -- SigNoz
+  # o11y.tolerations -- Tolerations for pod assignment.
+  # @section -- Hanzo O11y
   # @default -- []
   tolerations: []
-  # signoz.affinity -- Affinity settings for pod assignment.
-  # @section -- SigNoz
+  # o11y.affinity -- Affinity settings for pod assignment.
+  # @section -- Hanzo O11y
   # @default -- {}
   affinity: {}
-  # signoz.topologySpreadConstraints -- Topology spread constraints for pod distribution.
-  # @section -- SigNoz
+  # o11y.topologySpreadConstraints -- Topology spread constraints for pod distribution.
+  # @section -- Hanzo O11y
   # @default -- []
   topologySpreadConstraints: []
-  # signoz.persistence -- Persistence configuration for the internal SQLite database.
-  # @section -- SigNoz
+  # o11y.persistence -- Persistence configuration for the internal SQLite database.
+  # @section -- Hanzo O11y
   persistence:
-    # signoz.persistence.enabled - Enable data persistence using a PVC.
+    # o11y.persistence.enabled - Enable data persistence using a PVC.
     # @default -- true
     enabled: true
-    # signoz.persistence.existingClaim - Use a manually managed PVC.
+    # o11y.persistence.existingClaim - Use a manually managed PVC.
     # @default -- ""
     existingClaim: ""
-    # signoz.persistence.storageClass - The storage class for the PVC. If "-", disables dynamic provisioning.
+    # o11y.persistence.storageClass - The storage class for the PVC. If "-", disables dynamic provisioning.
     # @default -- null
     storageClass: null
-    # signoz.persistence.accessModes - Access modes for the persistent volume.
+    # o11y.persistence.accessModes - Access modes for the persistent volume.
     # @default -- ["ReadWriteOnce"]
     accessModes:
       - ReadWriteOnce
-    # signoz.persistence.size - The size of the persistent volume.
+    # o11y.persistence.size - The size of the persistent volume.
     # @default -- "1Gi"
     size: 1Gi
 # telemetryStoreMigrator -- Default values for the Telemetry Store Migrator.
@@ -1013,9 +1013,9 @@ telemetryStoreMigrator:
   # @section -- Telemetry Store Migrator
   enabled: true
   # telemetryStoreMigrator.name -- The name of the Telemetry Store Migrator component.
-  # @default -- "signoz-telemetrystore-migrator"
+  # @default -- "o11y-telemetrystore-migrator"
   # @section -- Telemetry Store Migrator
-  name: "signoz-telemetrystore-migrator"
+  name: "o11y-telemetrystore-migrator"
   # telemetryStoreMigrator.annotations -- Annotations for the Telemetry Store Migrator job.
   # @default -- {}
   # @section -- Telemetry Store Migrator
@@ -1081,8 +1081,8 @@ otelCollector:
     # @default -- "docker.io"
     registry: docker.io
     # otelCollector.image.repository - The container image repository.
-    # @default -- "signoz/signoz-otel-collector"
-    repository: signoz/signoz-otel-collector
+    # @default -- "ghcr.io/hanzoai/otel-collector"
+    repository: ghcr.io/hanzoai/otel-collector
     # otelCollector.image.tag - The container image tag.
     # @default -- "v0.144.0"
     tag: v0.144.2
@@ -1102,8 +1102,8 @@ otelCollector:
   # @section -- Otel Collector
   command:
     # otelCollector.command.name - Otel Collector command name.
-    # @default -- "/signoz-otel-collector"
-    name: /signoz-otel-collector
+    # @default -- "/o11y-otel-collector"
+    name: /o11y-otel-collector
     # otelCollector.command.extraArgs - Extra command-line arguments for the Otel Collector.
     extraArgs:
   # otelCollector.configMap -- ConfigMap settings.
@@ -1145,10 +1145,10 @@ otelCollector:
   annotations:
   # otelCollector.podAnnotations -- Annotations for the Otel Collector pod(s).
   # @section -- Otel Collector
-  # @default -- { signoz.io/scrape: "true", signoz.io/port: "8888" }
+  # @default -- { o11y.hanzo.ai/scrape: "true", o11y.hanzo.ai/port: "8888" }
   podAnnotations:
-    signoz.io/scrape: 'true'
-    signoz.io/port: '8888'
+    o11y.hanzo.ai/scrape: 'true'
+    o11y.hanzo.ai/port: '8888'
   # otelCollector.podLabels -- Labels for the Otel Collector pod(s).
   # @section -- Otel Collector
   # @default -- {}
@@ -1612,7 +1612,7 @@ otelCollector:
   # @default -- "Please checkout the default values in values.yml"
   config:
     connectors:
-      signozmeter:
+      o11ymeter:
         metrics_flush_interval: 1h
         dimensions:
           - name: service.name
@@ -1649,8 +1649,8 @@ otelCollector:
       # Memory Limiter processor. If not set, it will be overridden with values based on k8s resource limits.
       # ref: https://github.com/open-telemetry/opentelemetry-collector/blob/main/processor/memorylimiterprocessor/README.md
       # memory_limiter: null
-      signozspanmetrics/delta:
-        metrics_exporter: signozclickhousemetrics
+      o11yspanmetrics/delta:
+        metrics_exporter: o11yclickhousemetrics
         latency_histogram_buckets: [100us, 1ms, 2ms, 6ms, 10ms, 50ms, 100ms, 250ms, 500ms, 1000ms, 1400ms, 2000ms, 5s, 10s, 20s, 40s, 60s]
         dimensions_cache_size: 100000
         dimensions:
@@ -1658,7 +1658,7 @@ otelCollector:
             default: default
           - name: deployment.environment
             default: default
-          - name: signoz.collector.id
+          - name: o11y.collector.id
         aggregation_temporality: AGGREGATION_TEMPORALITY_DELTA
     extensions:
       health_check:
@@ -1672,7 +1672,7 @@ otelCollector:
         datasource: tcp://${env:CLICKHOUSE_USER}:${env:CLICKHOUSE_PASSWORD}@${env:CLICKHOUSE_HOST}:${env:CLICKHOUSE_PORT}/${env:CLICKHOUSE_TRACE_DATABASE}
         low_cardinal_exception_grouping: ${env:LOW_CARDINAL_EXCEPTION_GROUPING}
         use_new_schema: true
-      signozclickhousemetrics:
+      o11yclickhousemetrics:
         dsn: tcp://${env:CLICKHOUSE_USER}:${env:CLICKHOUSE_PASSWORD}@${env:CLICKHOUSE_HOST}:${env:CLICKHOUSE_PORT}/${env:CLICKHOUSE_DATABASE}
         timeout: 45s
       clickhouselogsexporter:
@@ -1681,12 +1681,12 @@ otelCollector:
         use_new_schema: true
       metadataexporter:
         enabled: true
-        dsn: tcp://${env:CLICKHOUSE_USER}:${env:CLICKHOUSE_PASSWORD}@${env:CLICKHOUSE_HOST}:${env:CLICKHOUSE_PORT}/signoz_metadata
+        dsn: tcp://${env:CLICKHOUSE_USER}:${env:CLICKHOUSE_PASSWORD}@${env:CLICKHOUSE_HOST}:${env:CLICKHOUSE_PORT}/o11y_metadata
         timeout: 10s
         tenant_id: ${env:TENANT_ID}
         cache:
           provider: in_memory
-      signozclickhousemeter:
+      o11yclickhousemeter:
         dsn: tcp://${env:CLICKHOUSE_USER}:${env:CLICKHOUSE_PASSWORD}@${env:CLICKHOUSE_HOST}:${env:CLICKHOUSE_PORT}/${env:CLICKHOUSE_METER_DATABASE}
         timeout: 45s
         sending_queue:
@@ -1699,35 +1699,35 @@ otelCollector:
       pipelines:
         traces:
           receivers: [otlp, jaeger]
-          processors: [signozspanmetrics/delta, batch]
-          exporters: [clickhousetraces, metadataexporter, signozmeter]
+          processors: [o11yspanmetrics/delta, batch]
+          exporters: [clickhousetraces, metadataexporter, o11ymeter]
         metrics:
           receivers: [otlp]
           processors: [batch]
-          exporters: [metadataexporter, signozclickhousemetrics, signozmeter]
+          exporters: [metadataexporter, o11yclickhousemetrics, o11ymeter]
         logs:
           receivers: [otlp, httplogreceiver/heroku, httplogreceiver/json]
           processors: [batch]
-          exporters: [clickhouselogsexporter, metadataexporter, signozmeter]
+          exporters: [clickhouselogsexporter, metadataexporter, o11ymeter]
         metrics/meter:
-          receivers: [signozmeter]
+          receivers: [o11ymeter]
           processors: [batch/meter]
-          exporters: [signozclickhousemeter]
+          exporters: [o11yclickhousemeter]
 # @section -- Postgres
 postgresql:
-  # postgresql.enabled -- Enable or disable the PostgreSQL for signoz.
-  # For more details, check out the postgresql chart: https://github.com/SigNoz/charts/tree/main/charts/postgresql
+  # postgresql.enabled -- Enable or disable the PostgreSQL for o11y.
+  # For more details, check out the postgresql chart: https://github.com/Hanzo O11y/charts/tree/main/charts/postgresql
   # @default -- false
   # @section -- Postgres
   enabled: false
-# -- This component is configurable with licensed version of SigNoz.
+# -- This component is configurable with licensed version of Hanzo O11y.
 # @section -- Otel Gateway Settings
-signoz-otel-gateway:
+o11y-otel-gateway:
   enabled: false
   # @ignored
   replicaCount: 1
-  # signoz-otel-gateway.strategy -- Deployment strategy to use
-  # @section -- signoz-otel-gateway
+  # o11y-otel-gateway.strategy -- Deployment strategy to use
+  # @section -- o11y-otel-gateway
   # @default -- "RollingUpdate"
   strategy: ""
   # @ignored
@@ -1738,7 +1738,7 @@ signoz-otel-gateway:
       # @ignored
       # config:
     # exporters:
-    #   signozkafka:
+    #   o11ykafka:
     #     brokers:
     #     # replace with the correct address based on the release name
     #     # - redpanda-0.redpanda.redpanda.svc.cluster.local:9093
@@ -1752,31 +1752,31 @@ signoz-otel-gateway:
     #   health_check:
     #     endpoint: 0.0.0.0:13133
     #     path: /healthz
-    #   signozadminapi:
+    #   o11yadminapi:
     #     cache:
-    #       extension: signozcache
+    #       extension: o11ycache
     #     endpoint: 0.0.0.0:8001
     #     limiter:
     #       policy: postgres
     #     storage:
-    #       extension: signozstorage
-    #   signozcache:
+    #       extension: o11ystorage
+    #   o11ycache:
     #     strategy: ${env:OTELGATEWAY_CACHE_STRATEGY}
     #     uri:
     #       database: ${env:OTELGATEWAY_REDIS_DATABASE}
     #       host: ${env:OTELGATEWAY_REDIS_HOST}
     #       port: ${env:OTELGATEWAY_REDIS_PORT}
-    #   signozkeyauth:
+    #   o11ykeyauth:
     #     cache:
-    #       extension: signozcache
+    #       extension: o11ycache
     #     headers:
-    #       - signoz-access-token
+    #       - o11y-access-token
     #       - authorization
-    #       - signoz-ingestion-key
+    #       - o11y-ingestion-key
     #       - x-amz-firehose-access-key
     #     storage:
-    #       extension: signozstorage
-    #   signozstorage:
+    #       extension: o11ystorage
+    #   o11ystorage:
     #     strategy: ${env:OTELGATEWAY_STORAGE_STRATEGY}
     #     uri:
     #       database: ${env:OTELGATEWAY_POSTGRES_DATABASE}
@@ -1789,94 +1789,94 @@ signoz-otel-gateway:
     # processors:
     #   batch:
     #     metadata_keys:
-    #       - signoz-workspace-name
+    #       - o11y-workspace-name
     #     send_batch_max_size: 25000
     #     send_batch_size: 20000
     #     timeout: 10s
-    #   signozlimiter/postgres:
+    #   o11ylimiter/postgres:
     #     cache:
-    #       extension: signozcache
+    #       extension: o11ycache
     #     policy: postgres
     #     storage:
-    #       extension: signozstorage
+    #       extension: o11ystorage
     # receivers:
     #   otlp:
     #     protocols:
     #       grpc:
     #         auth:
-    #           authenticator: signozkeyauth
+    #           authenticator: o11ykeyauth
     #         endpoint: 0.0.0.0:4317
     #         max_recv_msg_size_mib: 16
     #       http:
     #         auth:
-    #           authenticator: signozkeyauth
+    #           authenticator: o11ykeyauth
     #         cors:
     #           allowed_origins:
     #             - '*'
     #         endpoint: 0.0.0.0:4318
-    #   signozhttplog/heroku:
+    #   o11yhttplog/heroku:
     #     auth:
-    #       authenticator: signozkeyauth
+    #       authenticator: o11ykeyauth
     #     endpoint: 0.0.0.0:8081
     #     source: heroku
-    #   signozhttplog/json:
+    #   o11yhttplog/json:
     #     auth:
-    #       authenticator: signozkeyauth
+    #       authenticator: o11ykeyauth
     #     endpoint: 0.0.0.0:8082
     #     source: json
-    #   signozawsfirehose/cwmetrics:
+    #   o11yawsfirehose/cwmetrics:
     #     auth:
-    #       authenticator: signozkeyauth
+    #       authenticator: o11ykeyauth
     #     endpoint: 0.0.0.0:8084
     #     record_type: cwmetrics
-    #   signozawsfirehose/cwlogs:
+    #   o11yawsfirehose/cwlogs:
     #     auth:
-    #       authenticator: signozkeyauth
+    #       authenticator: o11ykeyauth
     #     endpoint: 0.0.0.0:8085
     #     record_type: cwlogs
-    #   signozawsfirehose/otlp_v1:
+    #   o11yawsfirehose/otlp_v1:
     #     auth:
-    #       authenticator: signozkeyauth
+    #       authenticator: o11ykeyauth
     #     endpoint: 0.0.0.0:8086
     #     record_type: otlp_v1
     # service:
     #   extensions:
-    #     - signozstorage
-    #     - signozcache
+    #     - o11ystorage
+    #     - o11ycache
     #     - zpages
-    #     - signozkeyauth
+    #     - o11ykeyauth
     #     - health_check
-    #     - signozadminapi
+    #     - o11yadminapi
     #   pipelines:
     #     logs:
     #       exporters:
-    #         - signozkafka
+    #         - o11ykafka
     #       processors:
-    #         # replace with signozlimiter/redis if redis is used as cache backend
-    #         - signozlimiter/postgres
+    #         # replace with o11ylimiter/redis if redis is used as cache backend
+    #         - o11ylimiter/postgres
     #         - batch
     #       receivers:
     #         - otlp
-    #         - signozhttplog/heroku
-    #         - signozhttplog/json
-    #         - signozawsfirehose/cwlogs
+    #         - o11yhttplog/heroku
+    #         - o11yhttplog/json
+    #         - o11yawsfirehose/cwlogs
     #     metrics:
     #       exporters:
-    #         - signozkafka
+    #         - o11ykafka
     #       processors:
-    #         # replace with signozlimiter/redis if redis is used as cache backend
-    #         - signozlimiter/postgres
+    #         # replace with o11ylimiter/redis if redis is used as cache backend
+    #         - o11ylimiter/postgres
     #         - batch
     #       receivers:
     #         - otlp
-    #         - signozawsfirehose/cwmetrics
-    #         - signozawsfirehose/otlp_v1
+    #         - o11yawsfirehose/cwmetrics
+    #         - o11yawsfirehose/otlp_v1
     #     traces:
     #       exporters:
-    #         - signozkafka
+    #         - o11ykafka
     #       processors:
-    #         # replace with signozlimiter/redis if redis is used as cache backend
-    #         - signozlimiter/postgres
+    #         # replace with o11ylimiter/redis if redis is used as cache backend
+    #         - o11ylimiter/postgres
     #         - batch
     #       receivers:
     #         - otlp
@@ -1940,7 +1940,7 @@ signoz-otel-gateway:
         servicePort: 8086
         protocol: TCP
     type: NodePort
-# -- This component is configurable with licensed version of SigNoz.
+# -- This component is configurable with licensed version of Hanzo O11y.
 # @section -- Redpanda Settings
 redpanda:
   enabled: false
@@ -1975,9 +1975,9 @@ redpanda:
   statefulset:
     podTemplate:
       annotations:
-        signoz.io/path: /public_metrics
-        signoz.io/port: "9644"
-        signoz.io/scrape: "true"
+        o11y.hanzo.ai/path: /public_metrics
+        o11y.hanzo.ai/port: "9644"
+        o11y.hanzo.ai/scrape: "true"
     replicas: 3
     terminationGracePeriodSeconds: 180
   # @ignored

@@ -40,14 +40,14 @@ service:
 
 auth:
   # auth.username -- Username for the custom user to create.
-  # @default -- "signoz"
-  username: "signoz"
+  # @default -- "o11y"
+  username: "o11y"
   # auth.password -- Password for the custom user to create. Ignored if `auth.existingSecret` is provided.
-  # @default -- "signoz@123"
-  password: "signoz123"
+  # @default -- "o11y@123"
+  password: "o11y123"
   # auth.database -- Name for a custom database to create.
   # @default -- ""
-  database: "signoz"
+  database: "o11y"
   # auth.existingSecret -- Name of existing secret to use for PostgreSQL credentials. `auth.password` will be ignored and picked up from this secret.
   # @default -- ""
   existingSecret: ""
@@ -154,13 +154,13 @@ persistence:
   accessModes:
     - ReadWriteOnce
   # persistence.mountPath -- Mount path for Postgres data.
-  # @default -- "/signoz/postgresql"
+  # @default -- "/o11y/postgresql"
   mountPath: /var/lib/postgresql
   # persistence.subPath -- Subpath within the volume for Postgres data.
   # @default -- ""
   subPath: ""
   # persistence.dataDir -- Data directory for Postgres data.
-  # @default -- "/signoz/postgresql/data"
+  # @default -- "/o11y/postgresql/data"
   dataDir: /var/lib/postgresql/data
 
 # additionalArgs -- Additional command-line arguments for Postgres containers.

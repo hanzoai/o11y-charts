@@ -214,7 +214,7 @@ spec:
           containers:
             - name: clickhouse
               # KEEP CLICKHOUSE-SERVER VERSION IN SYNC WITH
-              # https://github.com/SigNoz/signoz/blob/main/deploy/docker/clickhouse-setup/docker-compose.yaml#L5
+              # https://github.com/Hanzo O11y/o11y/blob/main/deploy/docker/clickhouse-setup/docker-compose.yaml#L5
               image: {{ template "clickhouse.image" . }}
               imagePullPolicy: {{ .Values.image.pullPolicy }}
               command:
@@ -307,7 +307,7 @@ spec:
               image: {{ include "logs.system.image" . }}
               imagePullPolicy: {{ .Values.logs.system.image.pullPolicy }}
               command:
-                - /signoz-collector
+                - /o11y-collector
               args:
                 - --config=/conf/config.yaml
               env:

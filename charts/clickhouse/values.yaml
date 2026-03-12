@@ -41,9 +41,9 @@ zookeeper:
     # -- Zookeeper image registry to use.
     registry: *GLOBAL_IMAGE_REGISTRY
     # -- Zookeeper image repository to use.
-    repository: signoz/zookeeper
+    repository: ghcr.io/hanzoai/zookeeper
     # -- Zookeeper image tag.
-    # Note: SigNoz ClickHouse does not support all versions of Zookeeper.
+    # Note: Hanzo O11y ClickHouse does not support all versions of Zookeeper.
     # Please override the default only if you know what you are doing.
     tag: 3.7.1
 
@@ -70,9 +70,9 @@ zookeeper:
       enabled: true
       # -- ZooKeeper metrics service annotation
       annotations: {}
-        # signoz.io/scrape: 'true'
-        # signoz.io/port: '9141'
-        # signoz.io/path: /metrics
+        # o11y.hanzo.ai/scrape: 'true'
+        # o11y.hanzo.ai/port: '9141'
+        # o11y.hanzo.ai/path: /metrics
 
   # -- Minimal SERVER_ID value, nodes increment their IDs respectively.
   # Servers increment their ID starting at this minimal value.
@@ -147,11 +147,11 @@ fullnameOverride: ""
 # -- Clickhouse cluster
 cluster: cluster
 # -- Clickhouse database
-database: signoz_metrics
-# -- Clickhouse trace database (SigNoz Traces)
-traceDatabase: signoz_traces
-# -- Clickhouse log database (SigNoz Logs)
-logDatabase: signoz_logs
+database: o11y_metrics
+# -- Clickhouse trace database (Hanzo O11y Traces)
+traceDatabase: o11y_traces
+# -- Clickhouse log database (Hanzo O11y Logs)
+logDatabase: o11y_logs
 # -- Clickhouse user
 user: admin
 # -- Clickhouse password
@@ -167,9 +167,9 @@ image:
   # -- Clickhouse image registry to use.
   registry: docker.io
   # -- Clickhouse image repository to use.
-  repository: clickhouse/clickhouse-server
+  repository: ghcr.io/hanzoai/datastore
   # -- Clickhouse image tag.
-  # Note: SigNoz does not support all versions of ClickHouse.
+  # Note: Hanzo O11y does not support all versions of ClickHouse.
   # Please override the default only if you know what you are doing.
   tag: 24.1.2-alpine
   # -- Clickhouse image pull policy.
@@ -214,7 +214,7 @@ verify: false
 # -- URL for external zookeeper.
 externalZookeeper: {}
   # servers:
-  #   - host: signoz-zookeeper
+  #   - host: o11y-zookeeper
   #     port: 2181
 
 # -- Clickhouse priority class name
@@ -362,7 +362,7 @@ initContainers:
         node_arch=$(uname -m | sed s/aarch64/arm64/ | sed s/x86_64/amd64/)
         echo "Fetching histogram-binary for ${node_os}/${node_arch}"
         cd /tmp
-        wget -O histogram-quantile.tar.gz "https://github.com/SigNoz/signoz/releases/download/histogram-quantile%2F${version}/histogram-quantile_${node_os}_${node_arch}.tar.gz"
+        wget -O histogram-quantile.tar.gz "https://github.com/Hanzo O11y/o11y/releases/download/histogram-quantile%2F${version}/histogram-quantile_${node_os}_${node_arch}.tar.gz"
         tar -xzf histogram-quantile.tar.gz
         chmod +x histogram-quantile
         mv histogram-quantile /var/lib/clickhouse/user_scripts/histogramQuantile
@@ -379,7 +379,7 @@ initContainers:
       - -c
       - |
         set -e
-        until curl -s -o /dev/null http://signoz-clickhouse:8123/
+        until curl -s -o /dev/null http://o11y-datastore:8123/
         do sleep 1
         done
 
@@ -414,9 +414,9 @@ defaultSettings:
 podAnnotations: {}
   # Uncomment lines below to enable scraping of ClickHouse metrics.
   # Be sure to uncomment `settings` to enable built-in Prometheus HTTP endpoint.
-  # signoz.io/scrape: 'true'
-  # signoz.io/port: '9363'
-  # signoz.io/path: /metrics
+  # o11y.hanzo.ai/scrape: 'true'
+  # o11y.hanzo.ai/port: '9363'
+  # o11y.hanzo.ai/path: /metrics
 
 # -- Topologies on how to distribute the ClickHouse pod.
 # Possible values can be found here:
@@ -498,7 +498,7 @@ logs:
     enabled: false
     image:
       registry: docker.io
-      repository: signoz/signoz-otel-collector
+      repository: ghcr.io/hanzoai/otel-collector
       tag: 0.111.16
       pullPolicy: IfNotPresent
       pullSecrets: []
@@ -611,8 +611,8 @@ clickhouseOperator:
   annotations: {}
   # -- Clickhouse Operator pod(s) annotation.
   podAnnotations: {}
-    # signoz.io/port: '8888'
-    # signoz.io/scrape: 'true'
+    # o11y.hanzo.ai/port: '8888'
+    # o11y.hanzo.ai/scrape: 'true'
 
   # -- Clickhouse Operator pod-level security attributes and common container settings.
   podSecurityContext: {}

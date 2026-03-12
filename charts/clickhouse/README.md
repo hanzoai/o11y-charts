@@ -1,6 +1,6 @@
 # Clickhouse
 
-This helmchart is being installed as subchart/dependecy for signoz helmchart with default values.
+This helmchart is being installed as subchart/dependecy for o11y helmchart with default values.
 
 ### Usage recommendation
 
@@ -12,7 +12,7 @@ In case you are not using a well-know reserved private IP address range that are
   - 198.18.0.0/15
   - 192.168.0.0/16
 
-You must whitelist IP address range used for your enviroment (eg. kubernetes nodes IPs) manually in Signoz values chart.
+You must whitelist IP address range used for your enviroment (eg. kubernetes nodes IPs) manually in O11y values chart.
 
 ```yaml
 clickhouse:

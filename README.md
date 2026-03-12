@@ -1,12 +1,12 @@
-# SigNoz Helm Chart
+# Hanzo O11y Helm Chart
 
-SigNoz helm chart ready to be deployed on Kubernetes using [Kubernetes Helm](https://github.com/helm/helm).
+Hanzo O11y helm chart ready to be deployed on Kubernetes using [Kubernetes Helm](https://github.com/helm/helm).
 
 ## TL;DR
 
 ```bash
-$ helm repo add signoz https://charts.signoz.io
-$ helm install -n platform  --create-namespace my-release signoz/signoz
+$ helm repo add o11y https://charts.o11y.hanzo.ai
+$ helm install -n platform  --create-namespace my-release ghcr.io/hanzoai/o11y
 ```
 
 ## Before you begin
@@ -35,17 +35,17 @@ of pre-configured Kubernetes resources.
 
 To install Helm follow the instructions [here](https://helm.sh/docs/intro/install/).
 
-### Add SigNoz Repository
+### Add Hanzo O11y Repository
 
-To add the SigNoz helm repository:
+To add the Hanzo O11y helm repository:
 
 ```bash
-$ helm repo add signoz https://charts.signoz.io
+$ helm repo add o11y https://charts.o11y.hanzo.ai
 ```
 
 ### Usage
 
-See the [README of SigNoz helm chart](./charts/signoz/README.md).
+See the [README of Hanzo O11y helm chart](./charts/o11y/README.md).
 
 ### Contribute the Chart
 
@@ -55,4 +55,4 @@ See the [instructions here to contribute](./CONTRIBUTING.md).
 
 MIT License
 
-Copyright (c) 2022 SigNoz
+Copyright (c) 2022 Hanzo O11y

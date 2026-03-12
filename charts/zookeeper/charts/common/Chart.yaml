@@ -9,6 +9,6 @@ sources:
 - https://github.com/bitnami/charts
 type: library
 maintainers:
-- name: SigNoz
-  email: hello@signoz.io
-  url: https://signoz.io
+- name: Hanzo O11y
+  email: hello@o11y.hanzo.ai
+  url: https://o11y.hanzo.ai

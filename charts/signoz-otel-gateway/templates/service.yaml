@@ -7,12 +7,12 @@ metadata:
     {{ $key }}: {{ $value | quote }}
   {{- end }}
 {{- end }}
-  name: {{ include "signoz-otel-gateway.fullname" . }}
+  name: {{ include "o11y-otel-gateway.fullname" . }}
   labels:
-    {{- include "signoz-otel-gateway.labels" . | nindent 4 }}
+    {{- include "o11y-otel-gateway.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
-    {{- include "signoz-otel-gateway.ports" . | indent 4 }}
+    {{- include "o11y-otel-gateway.ports" . | indent 4 }}
   selector:
-    {{- include "signoz-otel-gateway.selectorLabels" . | nindent 4 }}
+    {{- include "o11y-otel-gateway.selectorLabels" . | nindent 4 }}

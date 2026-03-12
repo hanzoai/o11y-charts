@@ -4,9 +4,9 @@ Thank you for your interest in contributing to our project! We greatly value fee
 ## How can I contribute?
 
 ### Finding Issues to Work On
-- Check our [existing open issues](https://github.com/SigNoz/charts/issues?q=is%3Aopen+is%3Aissue)
-- Look for [good first issues](https://github.com/SigNoz/charts/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) to start with
-- Review [recently closed issues](https://github.com/SigNoz/charts/issues?q=is%3Aissue+is%3Aclosed) to avoid duplicates
+- Check our [existing open issues](https://github.com/Hanzo O11y/charts/issues?q=is%3Aopen+is%3Aissue)
+- Look for [good first issues](https://github.com/Hanzo O11y/charts/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) to start with
+- Review [recently closed issues](https://github.com/Hanzo O11y/charts/issues?q=is%3Aissue+is%3Aclosed) to avoid duplicates
 
 ### Submitting Pull Requests
 1. **Development**:
@@ -29,15 +29,15 @@ For substantial changes, please split your contribution into multiple PRs:
 We follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/). All commits and PRs should include type specifiers (e.g., `feat:`, `fix:`, `docs:`, etc.).
 
 ## How can I contribute to the charts repository?
-There are primarily 3 charts in the SigNoz Helm Charts repository:
-- signoz: signoz, signoz otel collector and schema Migrator
+There are primarily 3 charts in the Hanzo O11y Helm Charts repository:
+- o11y: o11y, o11y otel collector and schema Migrator
 - clickhouse: clickhouse and zookeeper
 - k8s-infra: k8s-infra collection agent
 
 
 ## Where do I go from here? 
 ### To run the helm chart for local development
-- run `git clone https://github.com/SigNoz/charts.git` followed by `cd charts`
+- run `git clone https://github.com/Hanzo O11y/charts.git` followed by `cd charts`
 - It is recommended to use a lightweight Kubernetes (k8s) cluster for local development:
   - [kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
   - [k3d](https://k3d.io/#installation)
@@ -46,4 +46,4 @@ There are primarily 3 charts in the SigNoz Helm Charts repository:
 
 ## How can I get help?
 Need assistance? Join our Slack community:
-- [`#contributing`](https://signoz-community.slack.com/archives/C01LWQ8KS7M)
+- [`#contributing`](https://o11y-community.slack.com/archives/C01LWQ8KS7M)

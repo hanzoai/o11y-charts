@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "signoz-otel-gateway.name" -}}
+{{- define "o11y-otel-gateway.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "signoz-otel-gateway.fullname" -}}
+{{- define "o11y-otel-gateway.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "signoz-otel-gateway.chart" -}}
+{{- define "o11y-otel-gateway.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "signoz-otel-gateway.labels" -}}
-helm.sh/chart: {{ include "signoz-otel-gateway.chart" . }}
-{{ include "signoz-otel-gateway.selectorLabels" . }}
+{{- define "o11y-otel-gateway.labels" -}}
+helm.sh/chart: {{ include "o11y-otel-gateway.chart" . }}
+{{ include "o11y-otel-gateway.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "signoz-otel-gateway.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "signoz-otel-gateway.name" . }}
+{{- define "o11y-otel-gateway.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "o11y-otel-gateway.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "signoz-otel-gateway.serviceAccountName" -}}
+{{- define "o11y-otel-gateway.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "signoz-otel-gateway.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "o11y-otel-gateway.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
@@ -64,7 +64,7 @@ Create the name of the service account to use
 {{/*
 Create a list of all ports
 */}}
-{{- define "signoz-otel-gateway.ports" -}}
+{{- define "o11y-otel-gateway.ports" -}}
 {{- $serviceType := deepCopy .Values.service.type -}}
 {{- $ports := deepCopy .Values.service.ports -}}
 {{- range $key, $port := $ports -}}
@@ -85,7 +85,7 @@ Create a list of all ports
 {{/*
 Create config map
 */}}
-{{- define "signoz-otel-gateway.config" -}}
+{{- define "o11y-otel-gateway.config" -}}
 {{- $config := omit .Values.config "create" -}}
 {{- range $key, $value := $config }}
 {{- $fmted := $value | toString }}
@@ -113,14 +113,14 @@ valueFrom:
 {{/*
 Create env
 */}}
-{{- define "signoz-otel-gateway.env" -}}
+{{- define "o11y-otel-gateway.env" -}}
 {{/*
     ====== GENERATED ENVIRONMENT VARIABLES ======
 */}}
 {{- $genEnv := dict -}}
-{{- $_ := set $genEnv "SIGNOZ_COMPONENT" "signoz-otel-gateway" -}}
-{{- $_ := set $genEnv "OTEL_SERVICE_NAME" "signoz-otel-gateway" -}}
-{{- $_ := set $genEnv "OTEL_RESOURCE_ATTRIBUTES" "signoz.component=$(SIGNOZ_COMPONENT),k8s.pod.uid=$(K8S_POD_UID),k8s.pod.ip=$(K8S_POD_IP)" -}}
+{{- $_ := set $genEnv "HANZO_COMPONENT" "o11y-otel-gateway" -}}
+{{- $_ := set $genEnv "OTEL_SERVICE_NAME" "o11y-otel-gateway" -}}
+{{- $_ := set $genEnv "OTEL_RESOURCE_ATTRIBUTES" "o11y.component=$(HANZO_COMPONENT),k8s.pod.uid=$(K8S_POD_UID),k8s.pod.ip=$(K8S_POD_IP)" -}}
 {{/*
     ====== FIELD ENVIRONMENT VARIABLES ======
 */}}
@@ -132,7 +132,7 @@ Create env
 {{/*
     ====== SECRET ENVIRONMENT VARIABLES ======
 */}}
-{{- $prefix := (include "signoz-otel-gateway.fullname" .) }}
+{{- $prefix := (include "o11y-otel-gateway.fullname" .) }}
 {{- $secretEnv := dict -}}
 {{- if .Values.externalSecrets.create -}}
   {{- range $key, $value := .Values.externalSecrets.secrets -}}
@@ -158,7 +158,7 @@ Create env
 */}}
 
 {{- $completeEnv := mergeOverwrite $genEnv $fieldEnv $userEnv $secretEnv -}}
-{{- template "signoz-otel-gateway.renderEnv" $completeEnv -}}
+{{- template "o11y-otel-gateway.renderEnv" $completeEnv -}}
 
 {{- end -}}
 
@@ -166,7 +166,7 @@ Create env
 Given a dictionary of variable=value pairs including value and valueFrom, render a container env block.
 Environment variables are sorted alphabetically
 */}}
-{{- define "signoz-otel-gateway.renderEnv" -}}
+{{- define "o11y-otel-gateway.renderEnv" -}}
 
 {{- $dict := . -}}
 

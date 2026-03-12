@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "signoz-otel-gateway.fullname" . }}
+  name: {{ include "o11y-otel-gateway.fullname" . }}
   labels:
-    {{- include "signoz-otel-gateway.labels" . | nindent 4 }}
+    {{- include "o11y-otel-gateway.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "signoz-otel-gateway.selectorLabels" . | nindent 6 }}
+      {{- include "o11y-otel-gateway.selectorLabels" . | nindent 6 }}
   strategy:
-    type: {{ .Values.signoz-otel-gateway.strategy | default "RollingUpdate" }}
+    type: {{ .Values.o11y-otel-gateway.strategy | default "RollingUpdate" }}
   template:
     metadata:
       annotations:
@@ -19,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
       labels:
-        {{- include "signoz-otel-gateway.labels" . | nindent 8 }}
+        {{- include "o11y-otel-gateway.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -28,7 +28,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "signoz-otel-gateway.serviceAccountName" . }}
+      serviceAccountName: {{ include "o11y-otel-gateway.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
@@ -40,7 +40,7 @@ spec:
           args:
             - migrate
           env:
-            {{- include "signoz-otel-gateway.env" . | nindent 12 }}
+            {{- include "o11y-otel-gateway.env" . | nindent 12 }}
       containers:
         - name: gateway
           securityContext:
@@ -66,7 +66,7 @@ spec:
             - {{ . | quote }}
             {{- end }}
           env:
-            {{- include "signoz-otel-gateway.env" . | nindent 12 }}
+            {{- include "o11y-otel-gateway.env" . | nindent 12 }}
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
@@ -84,7 +84,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: {{ include "signoz-otel-gateway.fullname" . }}
+            name: {{ include "o11y-otel-gateway.fullname" . }}
         {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

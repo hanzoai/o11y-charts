@@ -2,22 +2,22 @@
 # PostgreSQL
 {{ template "chart.badgesSection" . }}
 
-This Helm chart is installed as a subchart/dependency of the SigNoz Helm chart with default values.
+This Helm chart is installed as a subchart/dependency of the Hanzo O11y Helm chart with default values.
 
 ### TL;DR;
 
 ```sh
-helm repo add signoz https://charts.signoz.io
-helm install -n platform --create-namespace "my-release" signoz/{{ template "chart.name" .}}
+helm repo add o11y https://charts.o11y.io
+helm install -n platform --create-namespace "my-release" o11y/{{ template "chart.name" .}}
 ```
 
 ### Introduction
 
-SigNoz uses a relational database like SQLite, Postgres exclusively for storing metadata and control-plane information, such as organizations, users, dashboards, and configurations.
+Hanzo O11y uses a relational database like SQLite, Postgres exclusively for storing metadata and control-plane information, such as organizations, users, dashboards, and configurations.
 
 It does not replace ClickHouse, which remains necessary for storing and querying all observability telemetry data (traces, metrics, and logs).
 
-Refer to the documentation for a more detailed explanation of [Relational Database in Signoz](https://signoz.io/docs/manage/administrator-guide/configuration/relational-database/)
+Refer to the documentation for a more detailed explanation of [Relational Database in O11y](https://o11y.io/docs/manage/administrator-guide/configuration/relational-database/)
 
 ### Prerequisites
 
@@ -29,8 +29,8 @@ Refer to the documentation for a more detailed explanation of [Relational Databa
 To install the chart with the release name `my-release`:
 
 ```bash
-helm repo add signoz https://charts.signoz.io
-helm -n platform --create-namespace install "my-release" signoz/{{ template "chart.name" . }}
+helm repo add o11y https://charts.o11y.io
+helm -n platform --create-namespace install "my-release" o11y/{{ template "chart.name" . }}
 ```
 
 To uninstall/delete the `my-release` resources:

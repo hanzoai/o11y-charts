@@ -1,5 +1,5 @@
-{{- if .Values.signoz.ingress.enabled -}}
-{{- $fullName := include "signoz.fullname" . -}}
+{{- if .Values.o11y.ingress.enabled -}}
+{{- $fullName := include "o11y.fullname" . -}}
 {{- $ingressApiIsStable := eq (include "ingress.isStable" .) "true" -}}
 {{- $ingressSupportsPathType := eq (include "ingress.supportsPathType" .) "true" -}}
 apiVersion: {{ include "ingress.apiVersion" . }}
@@ -7,18 +7,18 @@ kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "signoz.labels" . | nindent 4 }}
-  {{- with .Values.signoz.ingress.annotations }}
+    {{- include "o11y.labels" . | nindent 4 }}
+  {{- with .Values.o11y.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.signoz.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
-  ingressClassName: {{ .Values.signoz.ingress.className }}
+  {{- if and .Values.o11y.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+  ingressClassName: {{ .Values.o11y.ingress.className }}
   {{- end }}
-  {{- if .Values.signoz.ingress.tls }}
+  {{- if .Values.o11y.ingress.tls }}
   tls:
-    {{- range .Values.signoz.ingress.tls }}
+    {{- range .Values.o11y.ingress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -29,7 +29,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.signoz.ingress.hosts }}
+    {{- range .Values.o11y.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:

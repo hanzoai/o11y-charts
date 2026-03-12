@@ -4,7 +4,7 @@ templates:
   - templates/clickhouse-instance/clickhouse-instance.yaml
 release:
   name: clickhouse
-  namespace: signoz
+  namespace: o11y
 tests:
   - it: should have format_schema_path setting
     asserts:

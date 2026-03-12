@@ -3,16 +3,16 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "signoz.name" -}}
+{{- define "o11y.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Create a default fully qualified app name for SigNoz.
+Create a default fully qualified app name for Hanzo O11y.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "signoz.fullname" -}}
+{{- define "o11y.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -28,23 +28,23 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "signoz.chart" -}}
+{{- define "o11y.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Return namespace of the signoz release
+Return namespace of the o11y release
 */}}
-{{- define "signoz.namespace" -}}
+{{- define "o11y.namespace" -}}
 {{- .Release.Namespace -}}
 {{- end -}}
 
 {{/*
 Common labels
 */}}
-{{- define "signoz.labels" -}}
-helm.sh/chart: {{ include "signoz.chart" . }}
-{{ include "signoz.selectorLabels" . }}
+{{- define "o11y.labels" -}}
+helm.sh/chart: {{ include "o11y.chart" . }}
+{{ include "o11y.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -54,30 +54,30 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "signoz.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "signoz.name" . }}
+{{- define "o11y.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "o11y.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/component: {{ default "signoz" .Values.signoz.name }}
+app.kubernetes.io/component: {{ default "o11y" .Values.o11y.name }}
 {{- end -}}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "signoz.serviceAccountName" -}}
-{{- if .Values.signoz.serviceAccount.create -}}
-    {{ default (include "signoz.fullname" .) .Values.signoz.serviceAccount.name }}
+{{- define "o11y.serviceAccountName" -}}
+{{- if .Values.o11y.serviceAccount.create -}}
+    {{ default (include "o11y.fullname" .) .Values.o11y.serviceAccount.name }}
 {{- else -}}
-    {{ default "default" .Values.signoz.serviceAccount.name }}
+    {{ default "default" .Values.o11y.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return the proper signoz image name
+Return the proper o11y image name
 */}}
-{{- define "signoz.image" -}}
-{{- $registryName := default .Values.signoz.image.registry .Values.global.imageRegistry -}}
-{{- $repositoryName := .Values.signoz.image.repository -}}
-{{- $tag := default .Chart.AppVersion .Values.signoz.image.tag | toString -}}
+{{- define "o11y.image" -}}
+{{- $registryName := default .Values.o11y.image.registry .Values.global.imageRegistry -}}
+{{- $repositoryName := .Values.o11y.image.repository -}}
+{{- $tag := default .Chart.AppVersion .Values.o11y.image.tag | toString -}}
 {{- if $registryName -}}
     {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
 {{- else -}}
@@ -86,31 +86,31 @@ Return the proper signoz image name
 {{- end -}}
 
 {{/*
-Set signoz port
+Set o11y port
 */}}
-{{- define "signoz.port" -}}
-{{- default 8080 .Values.signoz.service.port  -}}
+{{- define "o11y.port" -}}
+{{- default 8080 .Values.o11y.service.port  -}}
 {{- end -}}
 
 {{/*
-Set signoz internal port
+Set o11y internal port
 */}}
-{{- define "signoz.internalPort" -}}
-{{- default 8085 .Values.signoz.service.internalPort  -}}
+{{- define "o11y.internalPort" -}}
+{{- default 8085 .Values.o11y.service.internalPort  -}}
 {{- end -}}
 
 {{/*
-Set signoz url
+Set o11y url
 */}}
-{{- define "signoz.url" -}}
-{{ include "signoz.fullname" . }}:{{ include "signoz.port" . }}
+{{- define "o11y.url" -}}
+{{ include "o11y.fullname" . }}:{{ include "o11y.port" . }}
 {{- end -}}
 
 {{/*
-Set signoz internal url
+Set o11y internal url
 */}}
-{{- define "signoz.internalUrl" -}}
-{{ include "signoz.fullname" . }}:{{ include "signoz.internalPort" . }}
+{{- define "o11y.internalUrl" -}}
+{{ include "o11y.fullname" . }}:{{ include "o11y.internalPort" . }}
 {{- end -}}
 
 
@@ -118,14 +118,14 @@ Set signoz internal url
 Create a default fully qualified app name for telemetrystore migrator.
 */}}
 {{- define "telemetryStoreMigrator.fullname" -}}
-{{- default "signoz-telemetrystore-migrator" .Values.telemetryStoreMigrator.name -}}
+{{- default "o11y-telemetrystore-migrator" .Values.telemetryStoreMigrator.name -}}
 {{- end -}}
 
 {{/*
 Common labels
 */}}
 {{- define "telemetryStoreMigrator.labels" -}}
-helm.sh/chart: {{ include "signoz.chart" . }}
+helm.sh/chart: {{ include "o11y.chart" . }}
 {{ include "telemetryStoreMigrator.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
@@ -137,7 +137,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Common Selector labels of telemetrystore migrator
 */}}
 {{- define "telemetryStoreMigrator.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "signoz.name" . }}
+app.kubernetes.io/name: {{ include "o11y.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/component: {{ default "telemetrystore-migrator" .Values.telemetryStoreMigrator.name }}
 {{- end -}}
@@ -147,14 +147,14 @@ app.kubernetes.io/component: {{ default "telemetrystore-migrator" .Values.teleme
 Create a default fully qualified app name for otelCollector.
 */}}
 {{- define "otelCollector.fullname" -}}
-{{- printf "%s-%s" (include "signoz.fullname" .) .Values.otelCollector.name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "o11y.fullname" .) .Values.otelCollector.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Common labels
 */}}
 {{- define "otelCollector.labels" -}}
-helm.sh/chart: {{ include "signoz.chart" . }}
+helm.sh/chart: {{ include "o11y.chart" . }}
 {{ include "otelCollector.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
@@ -166,7 +166,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "otelCollector.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "signoz.name" . }}
+app.kubernetes.io/name: {{ include "o11y.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/component: {{ default "otel-collector" .Values.otelCollector.name }}
 {{- end -}}
@@ -216,7 +216,7 @@ Create the name of the clusterRole to use
 */}}
 {{- define "otelCollector.clusterRoleName" -}}
 {{- if .Values.otelCollector.clusterRole.create }}
-{{- $clusterRole := printf "%s-%s" (include "otelCollector.fullname" .) (include "signoz.namespace" .) -}}
+{{- $clusterRole := printf "%s-%s" (include "otelCollector.fullname" .) (include "o11y.namespace" .) -}}
 {{- default $clusterRole .Values.otelCollector.clusterRole.name }}
 {{- else }}
 {{- default "default" .Values.otelCollector.clusterRole.name }}
@@ -228,7 +228,7 @@ Create the name of the clusterRoleBinding to use
 */}}
 {{- define "otelCollector.clusterRoleBindingName" -}}
 {{- if .Values.otelCollector.clusterRole.create }}
-{{- $clusterRole := printf "%s-%s" (include "otelCollector.fullname" .) (include "signoz.namespace" .) -}}
+{{- $clusterRole := printf "%s-%s" (include "otelCollector.fullname" .) (include "o11y.namespace" .) -}}
 {{- default $clusterRole .Values.otelCollector.clusterRole.clusterRoleBinding.name }}
 {{- else }}
 {{- default "default" .Values.otelCollector.clusterRole.clusterRoleBinding.name }}
@@ -304,7 +304,7 @@ Return the service fqdn of Postgresql
 {{/*
 Return `nodePort: null` if service type is ClusterIP
 */}}
-{{- define "signoz.service.ifClusterIP" -}}
+{{- define "o11y.service.ifClusterIP" -}}
 {{- if (eq . "ClusterIP") }}
 nodePort: null
 {{- end }}
@@ -374,7 +374,7 @@ Return true if Let's Encrypt ClusterIssuer of `cert-manager` should be created.
 {{- end -}}
 
 {{/*
-Common K8s environment variables used by SigNoz OtelCollector.
+Common K8s environment variables used by Hanzo O11y OtelCollector.
 */}}
 {{- define "snippet.k8s-env" }}
 - name: K8S_NODE_NAME
@@ -407,7 +407,7 @@ Common K8s environment variables used by SigNoz OtelCollector.
 {{/*
 Return the proper Image Registry Secret Names.
 */}}
-{{- define "signoz.imagePullSecrets" -}}
+{{- define "o11y.imagePullSecrets" -}}
 {{- if or .Values.global.imagePullSecrets .Values.imagePullSecrets }}
 imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
@@ -423,14 +423,14 @@ imagePullSecrets:
 {{/* 
 Create Env
 */}}
-{{- define "signoz.env" -}}
+{{- define "o11y.env" -}}
 
 {{/*
 ====== Default ENV ======
 */}}
 {{- $defaultEnv := dict
-    "signoz_telemetrystore_clickhouse_dsn"     (printf "tcp://%s" (include "clickhouse.clickHouseUrl" .))
-    "signoz_telemetrystore_clickhouse_cluster" (include "clickhouse.cluster" .)
+    "o11y_telemetrystore_clickhouse_dsn"     (printf "tcp://%s" (include "clickhouse.clickHouseUrl" .))
+    "o11y_telemetrystore_clickhouse_cluster" (include "clickhouse.cluster" .)
 }}
 
 {{/*
@@ -457,49 +457,49 @@ Keep it seprate from sqlStorePostgresEnv to maintain the order of env variables
 */}}
 {{- $sqlStoreEnv := dict -}}
 {{- if .Values.postgresql.enabled -}}
-{{ $sqlStoreEnv = merge $sqlStoreEnv ( dict "signoz_sqlstore_provider" "postgres")}}
-{{ $sqlStoreEnv = merge $sqlStoreEnv ( dict "signoz_sqlstore_postgres_dsn" (include "postgresql.service" .))}}
+{{ $sqlStoreEnv = merge $sqlStoreEnv ( dict "o11y_sqlstore_provider" "postgres")}}
+{{ $sqlStoreEnv = merge $sqlStoreEnv ( dict "o11y_sqlstore_postgres_dsn" (include "postgresql.service" .))}}
 {{- end }}
 
 
 {{/*
 ===== USER ENV VARIABLES =====
 */}}
-{{- $userEnv := .Values.signoz.env | default dict -}}
+{{- $userEnv := .Values.o11y.env | default dict -}}
 
 {{/*
 ====== DEPRECATION & BACKWARD COMPATIBILITY ======
 */}}
 {{- $legacyEnv := dict -}}
-{{- if .Values.signoz.additionalEnvs }}
-{{- $legacyEnv = mergeOverwrite $legacyEnv .Values.signoz.additionalEnvs -}}
+{{- if .Values.o11y.additionalEnvs }}
+{{- $legacyEnv = mergeOverwrite $legacyEnv .Values.o11y.additionalEnvs -}}
 {{- end }}
 
-{{- if and .Values.configVars .Values.signoz.configVars.clickHouseUrl }}
-  {{- $legacyEnv = mergeOverwrite $legacyEnv (dict "signoz_telemetrystore_clickhouse_dsn" .Values.signoz.configVars.clickHouseUrl) -}}
+{{- if and .Values.configVars .Values.o11y.configVars.clickHouseUrl }}
+  {{- $legacyEnv = mergeOverwrite $legacyEnv (dict "o11y_telemetrystore_clickhouse_dsn" .Values.o11y.configVars.clickHouseUrl) -}}
 {{- end }}
 
 {{- $smtpSecretEnv := dict -}}
-{{- if and .Values.signoz.smtpVars .Values.signoz.smtpVars.enabled .Values.signoz.smtpVars.existingSecret (not .Values.signoz.env.signoz_emailing_enabled) }}  {{- $smtpSecretEnv = merge $smtpSecretEnv (dict "signoz_emailing_enabled" .Values.signoz.smtpVars.enabled) -}}
-  {{- with .Values.signoz.smtpVars.existingSecret }}
+{{- if and .Values.o11y.smtpVars .Values.o11y.smtpVars.enabled .Values.o11y.smtpVars.existingSecret (not .Values.o11y.env.o11y_emailing_enabled) }}  {{- $smtpSecretEnv = merge $smtpSecretEnv (dict "o11y_emailing_enabled" .Values.o11y.smtpVars.enabled) -}}
+  {{- with .Values.o11y.smtpVars.existingSecret }}
     {{- $secretName := .name -}}
     {{- if .fromKey }}
-      {{- $smtpSecretEnv = merge $smtpSecretEnv (dict "signoz_emailing_smtp_from" (dict "valueFrom" (dict "secretKeyRef" (dict "name" $secretName "key" .fromKey)))) -}}
+      {{- $smtpSecretEnv = merge $smtpSecretEnv (dict "o11y_emailing_smtp_from" (dict "valueFrom" (dict "secretKeyRef" (dict "name" $secretName "key" .fromKey)))) -}}
     {{- end }}
     {{- if .hostKey }}
-      {{- $smtpSecretEnv = merge $smtpSecretEnv (dict "signoz_emailing_smtp_host" (dict "valueFrom" (dict "secretKeyRef" (dict "name" $secretName "key" .hostKey)))) -}}
+      {{- $smtpSecretEnv = merge $smtpSecretEnv (dict "o11y_emailing_smtp_host" (dict "valueFrom" (dict "secretKeyRef" (dict "name" $secretName "key" .hostKey)))) -}}
     {{- end }}
     {{- if .portKey }}
-      {{- $smtpSecretEnv = merge $smtpSecretEnv (dict "signoz_emailing_smtp_port" (dict "valueFrom" (dict "secretKeyRef" (dict "name" $secretName "key" .portKey)))) -}}
+      {{- $smtpSecretEnv = merge $smtpSecretEnv (dict "o11y_emailing_smtp_port" (dict "valueFrom" (dict "secretKeyRef" (dict "name" $secretName "key" .portKey)))) -}}
     {{- end }}
     {{- if and .hostKey .portKey }}
-      {{- $smtpSecretEnv = merge $smtpSecretEnv (dict "signoz_emailing_smtp_address" "$(SIGNOZ_EMAILING_SMTP_HOST):$(SIGNOZ_EMAILING_SMTP_PORT)") -}}
+      {{- $smtpSecretEnv = merge $smtpSecretEnv (dict "o11y_emailing_smtp_address" "$(HANZO_EMAILING_SMTP_HOST):$(HANZO_EMAILING_SMTP_PORT)") -}}
     {{- end }}
     {{- if .usernameKey }}
-      {{- $smtpSecretEnv = merge $smtpSecretEnv (dict "signoz_emailing_smtp_auth_username" (dict "valueFrom" (dict "secretKeyRef" (dict "name" $secretName "key" .usernameKey)))) -}}
+      {{- $smtpSecretEnv = merge $smtpSecretEnv (dict "o11y_emailing_smtp_auth_username" (dict "valueFrom" (dict "secretKeyRef" (dict "name" $secretName "key" .usernameKey)))) -}}
     {{- end }}
     {{- if .passwordKey }}
-      {{- $smtpSecretEnv = merge $smtpSecretEnv (dict "signoz_emailing_smtp_auth_password" (dict "valueFrom" (dict "secretKeyRef" (dict "name" $secretName "key" .passwordKey)))) -}}
+      {{- $smtpSecretEnv = merge $smtpSecretEnv (dict "o11y_emailing_smtp_auth_password" (dict "valueFrom" (dict "secretKeyRef" (dict "name" $secretName "key" .passwordKey)))) -}}
     {{- end }}
   {{- end }}
 {{- end }}
@@ -510,15 +510,15 @@ Keep it seprate from sqlStorePostgresEnv to maintain the order of env variables
 */}}
 
 {{- $completeEnv := mergeOverwrite $defaultEnv $userEnv $legacyEnv $smtpSecretEnv $sqlStorePostgresEnv -}}
-{{- template "signoz.renderEnv" $completeEnv -}}
+{{- template "o11y.renderEnv" $completeEnv -}}
 {{/* Render the sqlstoreEnv (provider, dsn) seprately to maintain the order of the env variables */}}
-{{- template "signoz.renderEnv" $sqlStoreEnv -}}
+{{- template "o11y.renderEnv" $sqlStoreEnv -}}
 {{- end -}}
 
 {{/*
 Function to render environment variables 
 */}}
-{{- define "signoz.renderEnv" -}}
+{{- define "o11y.renderEnv" -}}
 {{- $dict := . -}}
 {{- $processedKeys := dict -}}
 {{- range keys . | sortAlpha | reverse }}

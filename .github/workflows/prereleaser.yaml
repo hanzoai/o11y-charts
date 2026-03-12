@@ -20,7 +20,7 @@ on:
 jobs:
   verify:
     if: ${{ github.event.action != 'prereleaser' }}
-    uses: signoz/primus.workflows/.github/workflows/github-verify.yaml@main
+    uses: o11y/primus.workflows/.github/workflows/github-verify.yaml@main
     secrets: inherit
     with:
       PRIMUS_REF: main
@@ -28,7 +28,7 @@ jobs:
       GITHUB_MEMBER_NAME: ${{ github.actor }}
   charts:
     if: ${{ always() && (needs.verify.result != 'skipped' || github.event.action == 'prereleaser') }}
-    uses: signoz/primus.workflows/.github/workflows/releaser.yaml@main
+    uses: o11y/primus.workflows/.github/workflows/releaser.yaml@main
     secrets: inherit
     needs: [verify]
     with:

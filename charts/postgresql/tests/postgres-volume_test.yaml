@@ -4,7 +4,7 @@ templates:
   - templates/statefulset.yaml
 release:
   name: postgresql
-  namespace: signoz
+  namespace: o11y
 
 tests:
   - it: should render 4 volumes mounts and 1 volume when persistence.enabled=true

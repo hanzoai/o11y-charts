@@ -4,21 +4,21 @@ description: Helm chart for collecting metrics and logs in K8s
 type: application
 version: 0.15.0
 appVersion: "0.139.0"
-home: https://signoz.io
-icon: https://signoz.io/img/SigNozLogo-orange.svg
+home: https://o11y.hanzo.ai
+icon: https://o11y.hanzo.ai/img/Hanzo O11yLogo-orange.svg
 keywords:
-  - SigNoz
+  - Hanzo O11y
   - OpenTelemetry
   - apm
   - monitoring
   - logs
 sources:
-  - https://github.com/signoz/charts
+  - https://github.com/o11y/charts
   - https://github.com/open-telemetry/opentelemetry-collector-contrib
 maintainers:
-  - name: SigNoz
-    email: hello@signoz.io
-    url: https://signoz.io
+  - name: Hanzo O11y
+    email: hello@o11y.hanzo.ai
+    url: https://o11y.hanzo.ai
   - name: prashant-shahi
-    email: prashant@signoz.io
+    email: prashant@o11y.hanzo.ai
     url: https://prashantshahi.dev

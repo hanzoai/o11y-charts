@@ -1,147 +1,147 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "signoz.fullname" . }}
+  name: {{ include "o11y.fullname" . }}
   labels:
-    {{- include "signoz.labels" . | nindent 4 }}
-  {{- if .Values.signoz.annotations }}
+    {{- include "o11y.labels" . | nindent 4 }}
+  {{- if .Values.o11y.annotations }}
   annotations:
-    {{- toYaml .Values.signoz.annotations | nindent 4 }}
+    {{- toYaml .Values.o11y.annotations | nindent 4 }}
   {{- end }}
 spec:
-  serviceName: {{ include "signoz.fullname" . }}
-  replicas: {{ .Values.signoz.replicaCount }}
+  serviceName: {{ include "o11y.fullname" . }}
+  replicas: {{ .Values.o11y.replicaCount }}
   selector:
     matchLabels:
-      {{- include "signoz.selectorLabels" . | nindent 6 }}
+      {{- include "o11y.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- if .Values.signoz.podAnnotations }}
+      {{- if .Values.o11y.podAnnotations }}
       annotations:
-        {{- toYaml .Values.signoz.podAnnotations | nindent 8 }}
+        {{- toYaml .Values.o11y.podAnnotations | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "signoz.selectorLabels" . | nindent 8 }}
+        {{- include "o11y.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.signoz.imagePullSecrets }}
+      {{- with .Values.o11y.imagePullSecrets }}
       imagePullSecrets:
       {{- range . }}
         - name: {{ . | quote }}
       {{- end }}
       {{- end }}
-      serviceAccountName: {{ include "signoz.serviceAccountName" . }}
-      priorityClassName: {{ .Values.signoz.priorityClassName | quote }}
-      {{- with .Values.signoz.nodeSelector }}
+      serviceAccountName: {{ include "o11y.serviceAccountName" . }}
+      priorityClassName: {{ .Values.o11y.priorityClassName | quote }}
+      {{- with .Values.o11y.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.signoz.affinity }}
+      {{- with .Values.o11y.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.signoz.tolerations }}
+      {{- with .Values.o11y.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.signoz.topologySpreadConstraints }}
+      {{- with .Values.o11y.topologySpreadConstraints }}
       topologySpreadConstraints:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       securityContext:
-        {{- toYaml .Values.signoz.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.o11y.podSecurityContext | nindent 8 }}
       containers:
-        - name: signoz
+        - name: o11y
           securityContext:
-            {{- toYaml .Values.signoz.securityContext | nindent 12 }}
-          image: {{ template "signoz.image" . }}
-          imagePullPolicy: {{ .Values.signoz.image.pullPolicy }}
+            {{- toYaml .Values.o11y.securityContext | nindent 12 }}
+          image: {{ template "o11y.image" . }}
+          imagePullPolicy: {{ .Values.o11y.image.pullPolicy }}
           args:
-            {{- range .Values.signoz.additionalArgs }}
+            {{- range .Values.o11y.additionalArgs }}
             - {{ . | quote }}
             {{- end }}
           ports:
             - name: http
-              containerPort: {{ default 8080  .Values.signoz.service.port }}
+              containerPort: {{ default 8080  .Values.o11y.service.port }}
               protocol: TCP
             - name: http-internal
-              containerPort: {{ default 8085 .Values.signoz.service.internalPort }}
+              containerPort: {{ default 8085 .Values.o11y.service.internalPort }}
               protocol: TCP
             - name: opamp-internal
-              containerPort: {{ default 4320 .Values.signoz.service.opampPort }}
+              containerPort: {{ default 4320 .Values.o11y.service.opampPort }}
               protocol: TCP
           env:
             {{- include "snippet.clickhouse-credentials" . | nindent 12 }}
-            {{- include "signoz.env" . | nindent 12 }}
-          {{- if .Values.signoz.livenessProbe.enabled }}
+            {{- include "o11y.env" . | nindent 12 }}
+          {{- if .Values.o11y.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              port: {{ .Values.signoz.livenessProbe.port }}
-              path: {{ .Values.signoz.livenessProbe.path }}
-            initialDelaySeconds: {{ .Values.signoz.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.signoz.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.signoz.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.signoz.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.signoz.livenessProbe.failureThreshold }}
-          {{- else if .Values.signoz.customLivenessProbe }}
-          livenessProbe: {{- toYaml .Values.signoz.customLivenessProbe | nindent 12 }}
+              port: {{ .Values.o11y.livenessProbe.port }}
+              path: {{ .Values.o11y.livenessProbe.path }}
+            initialDelaySeconds: {{ .Values.o11y.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.o11y.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.o11y.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.o11y.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.o11y.livenessProbe.failureThreshold }}
+          {{- else if .Values.o11y.customLivenessProbe }}
+          livenessProbe: {{- toYaml .Values.o11y.customLivenessProbe | nindent 12 }}
           {{- end }}
-          {{- if .Values.signoz.readinessProbe.enabled }}
+          {{- if .Values.o11y.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              port: {{ .Values.signoz.readinessProbe.port }}
-              path: {{ .Values.signoz.readinessProbe.path }}
-            initialDelaySeconds: {{ .Values.signoz.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.signoz.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.signoz.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.signoz.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.signoz.readinessProbe.failureThreshold }}
-          {{- else if .Values.signoz.customReadinessProbe }}
-          readinessProbe: {{- toYaml .Values.signoz.customReadinessProbe | nindent 12 }}
+              port: {{ .Values.o11y.readinessProbe.port }}
+              path: {{ .Values.o11y.readinessProbe.path }}
+            initialDelaySeconds: {{ .Values.o11y.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.o11y.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.o11y.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.o11y.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.o11y.readinessProbe.failureThreshold }}
+          {{- else if .Values.o11y.customReadinessProbe }}
+          readinessProbe: {{- toYaml .Values.o11y.customReadinessProbe | nindent 12 }}
           {{- end }}
           volumeMounts:
           {{- if not .Values.postgresql.enabled }}
-          {{- if .Values.signoz.persistence.enabled }}
-          {{- if .Values.signoz.persistence.existingClaim }}
-            - name: signoz-db-existing-claim
+          {{- if .Values.o11y.persistence.enabled }}
+          {{- if .Values.o11y.persistence.existingClaim }}
+            - name: o11y-db-existing-claim
           {{- else }}
-            - name: signoz-db
+            - name: o11y-db
           {{- end }}
           {{- else }}
-            - name: signoz-db-volume
+            - name: o11y-db-volume
           {{- end }}
-              mountPath: /var/lib/signoz/
+              mountPath: /var/lib/o11y/
           {{- end}}
-          {{- if .Values.signoz.additionalVolumeMounts }}
-            {{- toYaml .Values.signoz.additionalVolumeMounts | nindent 12 }}
+          {{- if .Values.o11y.additionalVolumeMounts }}
+            {{- toYaml .Values.o11y.additionalVolumeMounts | nindent 12 }}
           {{- end }}
           resources:
-            {{- toYaml .Values.signoz.resources | nindent 12 }}
+            {{- toYaml .Values.o11y.resources | nindent 12 }}
       volumes:
         - name: dashboards
           emptyDir: {}
-        {{- if and (not .Values.signoz.persistence.enabled) (not .Values.postgresql.enabled )}}
-        - name: signoz-db-volume
+        {{- if and (not .Values.o11y.persistence.enabled) (not .Values.postgresql.enabled )}}
+        - name: o11y-db-volume
           emptyDir: {}
-        {{- else if and .Values.signoz.persistence.existingClaim (not .Values.postgresql.enabled )}}
-        - name: signoz-db-existing-claim
+        {{- else if and .Values.o11y.persistence.existingClaim (not .Values.postgresql.enabled )}}
+        - name: o11y-db-existing-claim
           persistentVolumeClaim:
-            claimName: {{ .Values.signoz.persistence.existingClaim }}
+            claimName: {{ .Values.o11y.persistence.existingClaim }}
         {{- end }}
-        {{- if .Values.signoz.additionalVolumes }}
-          {{- toYaml .Values.signoz.additionalVolumes | nindent 8 }}
+        {{- if .Values.o11y.additionalVolumes }}
+          {{- toYaml .Values.o11y.additionalVolumes | nindent 8 }}
         {{- end }}
 
-{{- if and (.Values.signoz.persistence.enabled) (not .Values.signoz.persistence.existingClaim) ( not .Values.postgresql.enabled )}}
+{{- if and (.Values.o11y.persistence.enabled) (not .Values.o11y.persistence.existingClaim) ( not .Values.postgresql.enabled )}}
   volumeClaimTemplates:
     - metadata:
-        name: signoz-db
+        name: o11y-db
       spec:
         accessModes:
-          {{- toYaml .Values.signoz.persistence.accessModes | nindent 10 }}
+          {{- toYaml .Values.o11y.persistence.accessModes | nindent 10 }}
         resources:
           requests:
-            storage: {{ .Values.signoz.persistence.size }}
-      {{- $storageClass := default .Values.signoz.persistence.storageClass .Values.global.storageClass -}}
+            storage: {{ .Values.o11y.persistence.size }}
+      {{- $storageClass := default .Values.o11y.persistence.storageClass .Values.global.storageClass -}}
       {{- if $storageClass -}}
       {{- if (eq "-" $storageClass) }}
         storageClassName: ""

@@ -1,29 +1,29 @@
 {{/*
-Common ClickHouse ENV variables and helpers used by SigNoz
+Common ClickHouse ENV variables and helpers used by Hanzo O11y
 */}}
 
 {{- define "snippet.clickhouse-env" }}
 {{- include "snippet.clickhouse-credentials" . }}
 {{- if .Values.clickhouse.enabled }}
 - name: CLICKHOUSE_DATABASE
-  value: {{ default "signoz_metrics" .Values.clickhouse.database | quote }}
+  value: {{ default "o11y_metrics" .Values.clickhouse.database | quote }}
 - name: CLICKHOUSE_TRACE_DATABASE
-  value: {{ default "signoz_traces" .Values.clickhouse.traceDatabase | quote }}
+  value: {{ default "o11y_traces" .Values.clickhouse.traceDatabase | quote }}
 - name: CLICKHOUSE_LOG_DATABASE
-  value: {{ default "signoz_logs" .Values.clickhouse.logDatabase | quote }}
+  value: {{ default "o11y_logs" .Values.clickhouse.logDatabase | quote }}
 - name: CLICKHOUSE_METER_DATABASE
-  value: {{ default "signoz_meter" .Values.clickhouse.meterDatabase | quote }}
+  value: {{ default "o11y_meter" .Values.clickhouse.meterDatabase | quote }}
 - name: CLICKHOUSE_VERIFY
   value: {{ .Values.clickhouse.verify | quote }}
 {{- else }}
 - name: CLICKHOUSE_DATABASE
-  value: {{ default "signoz_metrics" .Values.externalClickhouse.database | quote }}
+  value: {{ default "o11y_metrics" .Values.externalClickhouse.database | quote }}
 - name: CLICKHOUSE_TRACE_DATABASE
-  value: {{ default "signoz_traces" .Values.externalClickhouse.traceDatabase | quote }}
+  value: {{ default "o11y_traces" .Values.externalClickhouse.traceDatabase | quote }}
 - name: CLICKHOUSE_LOG_DATABASE
-  value: {{ default "signoz_logs" .Values.externalClickhouse.logDatabase | quote }}
+  value: {{ default "o11y_logs" .Values.externalClickhouse.logDatabase | quote }}
 - name: CLICKHOUSE_METER_DATABASE
-  value: {{ default "signoz_meter" .Values.externalClickhouse.meterDatabase | quote }}
+  value: {{ default "o11y_meter" .Values.externalClickhouse.meterDatabase | quote }}
 - name: CLICKHOUSE_VERIFY
   value: {{ .Values.externalClickhouse.verify | quote }}
 {{- end }}
@@ -196,13 +196,13 @@ Common ENV variables for the telemetry store migrator containers
 */}}
 {{- define "snippet.telemetryStoreMigrator-env" }}
 {{- include "snippet.clickhouse-credentials" . }}
-- name: SIGNOZ_OTEL_COLLECTOR_CLICKHOUSE_DSN
+- name: HANZO_OTEL_COLLECTOR_CLICKHOUSE_DSN
   value: "tcp://$(CLICKHOUSE_USER):$(CLICKHOUSE_PASSWORD)@$(CLICKHOUSE_HOST):$(CLICKHOUSE_PORT)"
-- name: SIGNOZ_OTEL_COLLECTOR_CLICKHOUSE_CLUSTER
+- name: HANZO_OTEL_COLLECTOR_CLICKHOUSE_CLUSTER
   value: $(CLICKHOUSE_CLUSTER)
-- name: SIGNOZ_OTEL_COLLECTOR_TIMEOUT
+- name: HANZO_OTEL_COLLECTOR_TIMEOUT
   value: {{ .Values.telemetryStoreMigrator.timeout | default "10m" | quote }}
-- name: SIGNOZ_OTEL_COLLECTOR_CLICKHOUSE_REPLICATION
+- name: HANZO_OTEL_COLLECTOR_CLICKHOUSE_REPLICATION
   value: {{ .Values.telemetryStoreMigrator.enableReplication | quote }}
 {{- end }}
 

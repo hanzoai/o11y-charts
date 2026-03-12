@@ -1,20 +1,20 @@
 
-# SigNoz
+# Hanzo O11y
 
 ![Version: 0.115.0](https://img.shields.io/badge/Version-0.115.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.115.0](https://img.shields.io/badge/AppVersion-v0.115.0-informational?style=flat-square)
 
-SigNoz is an open-source observability platform native to OpenTelemetry with logs, traces and metrics in a single application. An open-source alternative to DataDog, NewRelic, etc. 🔥 🖥. 👉 Open source Application Performance Monitoring (APM) & Observability tool
+Hanzo O11y is an open-source observability platform native to OpenTelemetry with logs, traces and metrics in a single application. An open-source alternative to DataDog, NewRelic, etc. 🔥 🖥. 👉 Open source Application Performance Monitoring (APM) & Observability tool
 
 ### TL;DR;
 
 ```sh
-helm repo add signoz https://charts.signoz.io
-helm install -n platform --create-namespace "my-release" signoz/signoz
+helm repo add o11y https://charts.o11y.hanzo.ai
+helm install -n platform --create-namespace "my-release" ghcr.io/hanzoai/o11y
 ```
 
 ### Introduction
 
-This chart bootstraps [SigNoz](https://signoz.io) cluster deployment on a
+This chart bootstraps [Hanzo O11y](https://o11y.hanzo.ai) cluster deployment on a
 Kubernetes cluster using [Helm](https://helm.sh) package manager.
 
 ### Prerequisites
@@ -27,11 +27,11 @@ Kubernetes cluster using [Helm](https://helm.sh) package manager.
 To install the chart with the release name `my-release`:
 
 ```bash
-helm repo add signoz https://charts.signoz.io
-helm -n platform --create-namespace install "my-release" signoz/signoz
+helm repo add o11y https://charts.o11y.hanzo.ai
+helm -n platform --create-namespace install "my-release" ghcr.io/hanzoai/o11y
 ```
 
-These commands deploy SigNoz on the Kubernetes cluster in the default configuration.
+These commands deploy Hanzo O11y on the Kubernetes cluster in the default configuration.
 The [Configuration](#configuration) section lists the parameters that can be configured during installation:
 
 > **Tip**: List all releases using `helm list`
@@ -66,12 +66,12 @@ kubectl delete namespace platform
 > #### Version 0.113.0
 > `schemaMigrator` has been deprecated and replaced by `telemetryStoreMigrator`.
 >
-> Store migrations are now handled by a single Job using the built-in `migrate` command in `signoz-otel-collector`.
-> If you had any overrides in `schemaMigrator`, move them to `telemetryStoreMigrator`. See the [upgrade guide](https://signoz.io/docs/operate/migration/upgrade-0.113) for details.
+> Store migrations are now handled by a single Job using the built-in `migrate` command in `o11y-otel-collector`.
+> If you had any overrides in `schemaMigrator`, move them to `telemetryStoreMigrator`. See the [upgrade guide](https://o11y.hanzo.ai/docs/operate/migration/upgrade-0.113) for details.
 >
 > The following `initContainers` have been removed as they are no longer required:
-> - `signoz.initContainers.init`
-> - `signoz.initContainers.migration`
+> - `o11y.initContainers.init`
+> - `o11y.initContainers.migration`
 > - `otelCollector.initContainers.init`
 >
 > Otel-collector no longer depends on the migrator Job existing. Readiness is now determined by a ClickHouse-based check (`migrate sync check`). If you had any of these overrides, remove them from your values.
@@ -84,8 +84,8 @@ kubectl delete namespace platform
 >
 > | Key | Status | Replacement |
 > | --- | --- | --- |
-> | `signoz.initContainers.init` | Deprecated | None |
-> | `signoz.initContainers.migration` | Deprecated | None |
+> | `o11y.initContainers.init` | Deprecated | None |
+> | `o11y.initContainers.migration` | Deprecated | None |
 > | `otelCollector.initContainers.init` | Deprecated | None |
 > | `schemaMigrator.enabled` | Replaced | `telemetryStoreMigrator.enabled` |
 > | `schemaMigrator.name` | Replaced | `telemetryStoreMigrator.name` |
@@ -104,26 +104,26 @@ kubectl delete namespace platform
 > | `schemaMigrator.role` | Deprecated | None |
 >
 > #### Version 0.89.0
-> After August 28, 2025, Bitnami will require paid subscriptions for their image updates. SigNoz utilises Bitnami container images and Helm charts for Zookeeper.
+> After August 28, 2025, Bitnami will require paid subscriptions for their image updates. Hanzo O11y utilises Bitnami container images and Helm charts for Zookeeper.
 >
 > To ensure continued stability, we have migrated the Zookeeper Images and Charts to our own repositories.
 >
-> You must upgrade to SigNoz `v0.89.0` to avoid any service interruption.
-> More details are available in [Issue #731](https://github.com/SigNoz/charts/issues/731)
+> You must upgrade to Hanzo O11y `v0.89.0` to avoid any service interruption.
+> More details are available in [Issue #731](https://github.com/Hanzo O11y/charts/issues/731)
 > #### Version 0.88.0
 > **Configuration Migration Required:**
-> - `signoz.configVars` has been deprecated
-> - `signoz.smtpVars` has been deprecated
-> - `signoz.additionalEnvs` has been deprecated
-> These configuration options must now be specified under `signoz.env` instead.
+> - `o11y.configVars` has been deprecated
+> - `o11y.smtpVars` has been deprecated
+> - `o11y.additionalEnvs` has been deprecated
+> These configuration options must now be specified under `o11y.env` instead.
 >
-> Refer to the official [documentation](https://github.com/SigNoz/signoz/blob/main/conf/example.yaml) for a complete list of env variables.
+> Refer to the official [documentation](https://github.com/Hanzo O11y/o11y/blob/main/conf/example.yaml) for a complete list of env variables.
 > <br/> Note on Variable Naming: Environment variables are derived from the YAML configuration.
-> <br/> For example, a key `address` for `smtp` under the `emailing` section becomes `signoz_emailing_smtp_address`.
+> <br/> For example, a key `address` for `smtp` under the `emailing` section becomes `o11y_emailing_smtp_address`.
 >
 > **Before:**
 > ```yaml
-> signoz:
+> o11y:
 >  configVars:
 >    storage: clickhouse
 >  smtpVars:
@@ -135,10 +135,10 @@ kubectl delete namespace platform
 >
 > **After:**
 > ```yaml
-> signoz:
+> o11y:
 >  env:
 >    storage: clickhouse
->    signoz_emailing_smtp_address:
+>    o11y_emailing_smtp_address:
 >      valueFrom:
 >        secretKeyRef:
 >          name: my-secret-name
@@ -260,7 +260,7 @@ storageClass: null</pre>
                 <div style="max-width: 300px;"><pre lang="yaml">""</pre>
 </div>
             </td>
-            <td>Name of the K8s cluster. Used by SigNoz OtelCollectors to attach to telemetry data.</td>
+            <td>Name of the K8s cluster. Used by Hanzo O11y OtelCollectors to attach to telemetry data.</td>
         </tr>
         <tr>
             <td id="imagePullSecrets"><a href="./values.yaml#L52">imagePullSecrets</a></td>
@@ -269,7 +269,7 @@ storageClass: null</pre>
                 <div style="max-width: 300px;"><pre lang="yaml">[]</pre>
 </div>
             </td>
-            <td>Image Registry Secret Names for all SigNoz components. If `global.imagePullSecrets` is set, it will be merged with this list. This has lower precedence than `imagePullSecrets` at the individual component level.</td>
+            <td>Image Registry Secret Names for all Hanzo O11y components. If `global.imagePullSecrets` is set, it will be merged with this list. This has lower precedence than `imagePullSecrets` at the individual component level.</td>
         </tr>
     </tbody>
 </table>
@@ -287,17 +287,17 @@ storageClass: null</pre>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">cluster: cluster
-database: signoz_metrics
+database: o11y_metrics
 existingSecret: null
 existingSecretPasswordKey: null
 host: null
 httpPort: 8123
-logDatabase: signoz_logs
-meterDatabase: signoz_meter
+logDatabase: o11y_logs
+meterDatabase: o11y_meter
 password: ""
 secure: false
 tcpPort: 9000
-traceDatabase: signoz_traces
+traceDatabase: o11y_traces
 user: ""
 verify: false</pre>
 </div>
@@ -306,7 +306,7 @@ verify: false</pre>
         </tr>
     </tbody>
 </table>
-<h3>SigNoz</h3>
+<h3>Hanzo O11y</h3>
 <table>
     <thead>
         <th>Key</th>
@@ -316,55 +316,55 @@ verify: false</pre>
     </thead>
     <tbody>
         <tr>
-            <td id="signoz"><a href="./values.yaml#L747">signoz</a></td>
+            <td id="o11y"><a href="./values.yaml#L747">o11y</a></td>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">Please checkout the default values in values.yml</pre>
 </div>
             </td>
-            <td>Default values for SigNoz.</td>
+            <td>Default values for Hanzo O11y.</td>
         </tr>
         <tr>
-            <td id="signoz--name"><a href="./values.yaml#L751">signoz.name</a></td>
+            <td id="o11y--name"><a href="./values.yaml#L751">o11y.name</a></td>
             <td>string</td>
             <td>
-                <div style="max-width: 300px;"><pre lang="yaml">signoz</pre>
+                <div style="max-width: 300px;"><pre lang="yaml">o11y</pre>
 </div>
             </td>
-            <td>The name of the SigNoz component.</td>
+            <td>The name of the Hanzo O11y component.</td>
         </tr>
         <tr>
-            <td id="signoz--replicaCount"><a href="./values.yaml#L755">signoz.replicaCount</a></td>
+            <td id="o11y--replicaCount"><a href="./values.yaml#L755">o11y.replicaCount</a></td>
             <td>int</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">1</pre>
 </div>
             </td>
-            <td>The number of pod replicas for SigNoz.</td>
+            <td>The number of pod replicas for Hanzo O11y.</td>
         </tr>
         <tr>
-            <td id="signoz--image"><a href="./values.yaml#L758">signoz.image</a></td>
+            <td id="o11y--image"><a href="./values.yaml#L758">o11y.image</a></td>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">pullPolicy: IfNotPresent
 registry: docker.io
-repository: signoz/signoz
+repository: ghcr.io/hanzoai/o11y
 tag: v0.115.0</pre>
 </div>
             </td>
-            <td>Image configuration for SigNoz.</td>
+            <td>Image configuration for Hanzo O11y.</td>
         </tr>
         <tr>
-            <td id="signoz--imagePullSecrets"><a href="./values.yaml#L776">signoz.imagePullSecrets</a></td>
+            <td id="o11y--imagePullSecrets"><a href="./values.yaml#L776">o11y.imagePullSecrets</a></td>
             <td>list</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">[]</pre>
 </div>
             </td>
-            <td>Image pull secrets for SigNoz. This has higher precedence than the root level or global value.</td>
+            <td>Image pull secrets for Hanzo O11y. This has higher precedence than the root level or global value.</td>
         </tr>
         <tr>
-            <td id="signoz--serviceAccount"><a href="./values.yaml#L779">signoz.serviceAccount</a></td>
+            <td id="o11y--serviceAccount"><a href="./values.yaml#L779">o11y.serviceAccount</a></td>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">annotations: {}
@@ -372,41 +372,41 @@ create: true
 name: null</pre>
 </div>
             </td>
-            <td>Service Account configuration for SigNoz.</td>
+            <td>Service Account configuration for Hanzo O11y.</td>
         </tr>
         <tr>
-            <td id="signoz--annotations"><a href="./values.yaml#L823">signoz.annotations</a></td>
+            <td id="o11y--annotations"><a href="./values.yaml#L823">o11y.annotations</a></td>
             <td>string</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">null</pre>
 </div>
             </td>
-            <td>Annotations for the SigNoz pod.</td>
+            <td>Annotations for the Hanzo O11y pod.</td>
         </tr>
         <tr>
-            <td id="signoz--additionalArgs"><a href="./values.yaml#L827">signoz.additionalArgs</a></td>
+            <td id="o11y--additionalArgs"><a href="./values.yaml#L827">o11y.additionalArgs</a></td>
             <td>list</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">[]</pre>
 </div>
             </td>
-            <td>Additional command-line arguments for SigNoz.</td>
+            <td>Additional command-line arguments for Hanzo O11y.</td>
         </tr>
         <tr>
-            <td id="signoz--env"><a href="./values.yaml#L851">signoz.env</a></td>
+            <td id="o11y--env"><a href="./values.yaml#L851">o11y.env</a></td>
             <td>object</td>
             <td>
-                <div style="max-width: 300px;"><pre lang="yaml">signoz_alertmanager_provider: signoz
-signoz_alertmanager_signoz_external__url: http://localhost:8080
-signoz_emailing_enabled: false
-signoz_prometheus_active__query__tracker_enabled: false
-signoz_telemetrystore_provider: clickhouse</pre>
+                <div style="max-width: 300px;"><pre lang="yaml">o11y_alertmanager_provider: o11y
+o11y_alertmanager_o11y_external__url: http://localhost:8080
+o11y_emailing_enabled: false
+o11y_prometheus_active__query__tracker_enabled: false
+o11y_telemetrystore_provider: clickhouse</pre>
 </div>
             </td>
-            <td>Environment variables for SigNoz. Refer to the official documentation for a complete list: https://github.com/SigNoz/signoz/blob/main/conf/example.yaml Note on Variable Naming: Environment variables are derived from the YAML configuration. For example, a key `provider` under the `telemetry_store` section becomes `signoz_telemetrystore_provider`.</td>
+            <td>Environment variables for Hanzo O11y. Refer to the official documentation for a complete list: https://github.com/Hanzo O11y/o11y/blob/main/conf/example.yaml Note on Variable Naming: Environment variables are derived from the YAML configuration. For example, a key `provider` under the `telemetry_store` section becomes `o11y_telemetrystore_provider`.</td>
         </tr>
         <tr>
-            <td id="signoz--podSecurityContext"><a href="./values.yaml#L868">signoz.podSecurityContext</a></td>
+            <td id="o11y--podSecurityContext"><a href="./values.yaml#L868">o11y.podSecurityContext</a></td>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">{}</pre>
@@ -415,16 +415,16 @@ signoz_telemetrystore_provider: clickhouse</pre>
             <td>Pod-level security context.</td>
         </tr>
         <tr>
-            <td id="signoz--podAnnotations"><a href="./values.yaml#L874">signoz.podAnnotations</a></td>
+            <td id="o11y--podAnnotations"><a href="./values.yaml#L874">o11y.podAnnotations</a></td>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">{}</pre>
 </div>
             </td>
-            <td>Annotations for the SigNoz pod.</td>
+            <td>Annotations for the Hanzo O11y pod.</td>
         </tr>
         <tr>
-            <td id="signoz--securityContext"><a href="./values.yaml#L878">signoz.securityContext</a></td>
+            <td id="o11y--securityContext"><a href="./values.yaml#L878">o11y.securityContext</a></td>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">{}</pre>
@@ -433,25 +433,25 @@ signoz_telemetrystore_provider: clickhouse</pre>
             <td>Container-level security context.</td>
         </tr>
         <tr>
-            <td id="signoz--additionalVolumeMounts"><a href="./values.yaml#L889">signoz.additionalVolumeMounts</a></td>
+            <td id="o11y--additionalVolumeMounts"><a href="./values.yaml#L889">o11y.additionalVolumeMounts</a></td>
             <td>list</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">[]</pre>
 </div>
             </td>
-            <td>Additional volume mounts for the SigNoz container.</td>
+            <td>Additional volume mounts for the Hanzo O11y container.</td>
         </tr>
         <tr>
-            <td id="signoz--additionalVolumes"><a href="./values.yaml#L893">signoz.additionalVolumes</a></td>
+            <td id="o11y--additionalVolumes"><a href="./values.yaml#L893">o11y.additionalVolumes</a></td>
             <td>list</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">[]</pre>
 </div>
             </td>
-            <td>Additional volumes for the SigNoz pod.</td>
+            <td>Additional volumes for the Hanzo O11y pod.</td>
         </tr>
         <tr>
-            <td id="signoz--livenessProbe"><a href="./values.yaml#L897">signoz.livenessProbe</a></td>
+            <td id="o11y--livenessProbe"><a href="./values.yaml#L897">o11y.livenessProbe</a></td>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">Please checkout the default values in values.yml</pre>
@@ -460,7 +460,7 @@ signoz_telemetrystore_provider: clickhouse</pre>
             <td>Liveness probe configuration.</td>
         </tr>
         <tr>
-            <td id="signoz--readinessProbe"><a href="./values.yaml#L909">signoz.readinessProbe</a></td>
+            <td id="o11y--readinessProbe"><a href="./values.yaml#L909">o11y.readinessProbe</a></td>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">Please checkout the default values in values.yml</pre>
@@ -469,7 +469,7 @@ signoz_telemetrystore_provider: clickhouse</pre>
             <td>Readiness probe configuration.</td>
         </tr>
         <tr>
-            <td id="signoz--customLivenessProbe"><a href="./values.yaml#L921">signoz.customLivenessProbe</a></td>
+            <td id="o11y--customLivenessProbe"><a href="./values.yaml#L921">o11y.customLivenessProbe</a></td>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">{}</pre>
@@ -478,7 +478,7 @@ signoz_telemetrystore_provider: clickhouse</pre>
             <td>Custom liveness probe to override the default.</td>
         </tr>
         <tr>
-            <td id="signoz--customReadinessProbe"><a href="./values.yaml#L925">signoz.customReadinessProbe</a></td>
+            <td id="o11y--customReadinessProbe"><a href="./values.yaml#L925">o11y.customReadinessProbe</a></td>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">{}</pre>
@@ -487,7 +487,7 @@ signoz_telemetrystore_provider: clickhouse</pre>
             <td>Custom readiness probe to override the default.</td>
         </tr>
         <tr>
-            <td id="signoz--resources"><a href="./values.yaml#L960">signoz.resources</a></td>
+            <td id="o11y--resources"><a href="./values.yaml#L960">o11y.resources</a></td>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">null</pre>
@@ -496,16 +496,16 @@ signoz_telemetrystore_provider: clickhouse</pre>
             <td>Resource requests and limits. Ref: http://kubernetes.io/docs/user-guide/compute-resources/</td>
         </tr>
         <tr>
-            <td id="signoz--priorityClassName"><a href="./values.yaml#L971">signoz.priorityClassName</a></td>
+            <td id="o11y--priorityClassName"><a href="./values.yaml#L971">o11y.priorityClassName</a></td>
             <td>string</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">""</pre>
 </div>
             </td>
-            <td>Priority class for the SigNoz pods.</td>
+            <td>Priority class for the Hanzo O11y pods.</td>
         </tr>
         <tr>
-            <td id="signoz--nodeSelector"><a href="./values.yaml#L975">signoz.nodeSelector</a></td>
+            <td id="o11y--nodeSelector"><a href="./values.yaml#L975">o11y.nodeSelector</a></td>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">{}</pre>
@@ -514,7 +514,7 @@ signoz_telemetrystore_provider: clickhouse</pre>
             <td>Node selector for pod assignment.</td>
         </tr>
         <tr>
-            <td id="signoz--tolerations"><a href="./values.yaml#L979">signoz.tolerations</a></td>
+            <td id="o11y--tolerations"><a href="./values.yaml#L979">o11y.tolerations</a></td>
             <td>list</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">[]</pre>
@@ -523,7 +523,7 @@ signoz_telemetrystore_provider: clickhouse</pre>
             <td>Tolerations for pod assignment.</td>
         </tr>
         <tr>
-            <td id="signoz--affinity"><a href="./values.yaml#L983">signoz.affinity</a></td>
+            <td id="o11y--affinity"><a href="./values.yaml#L983">o11y.affinity</a></td>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">{}</pre>
@@ -532,7 +532,7 @@ signoz_telemetrystore_provider: clickhouse</pre>
             <td>Affinity settings for pod assignment.</td>
         </tr>
         <tr>
-            <td id="signoz--topologySpreadConstraints"><a href="./values.yaml#L987">signoz.topologySpreadConstraints</a></td>
+            <td id="o11y--topologySpreadConstraints"><a href="./values.yaml#L987">o11y.topologySpreadConstraints</a></td>
             <td>list</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">[]</pre>
@@ -541,7 +541,7 @@ signoz_telemetrystore_provider: clickhouse</pre>
             <td>Topology spread constraints for pod distribution.</td>
         </tr>
         <tr>
-            <td id="signoz--persistence"><a href="./values.yaml#L990">signoz.persistence</a></td>
+            <td id="o11y--persistence"><a href="./values.yaml#L990">o11y.persistence</a></td>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">accessModes:
@@ -556,7 +556,7 @@ storageClass: null</pre>
         </tr>
     </tbody>
 </table>
-<h3>SigNoz Networking</h3>
+<h3>Hanzo O11y Networking</h3>
 <table>
     <thead>
         <th>Key</th>
@@ -566,7 +566,7 @@ storageClass: null</pre>
     </thead>
     <tbody>
         <tr>
-            <td id="signoz--service"><a href="./values.yaml#L792">signoz.service</a></td>
+            <td id="o11y--service"><a href="./values.yaml#L792">o11y.service</a></td>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">annotations: {}
@@ -580,17 +580,17 @@ port: 8080
 type: ClusterIP</pre>
 </div>
             </td>
-            <td>Service configuration for SigNoz. This allows you to configure how SigNoz is exposed within the Kubernetes cluster.</td>
+            <td>Service configuration for Hanzo O11y. This allows you to configure how Hanzo O11y is exposed within the Kubernetes cluster.</td>
         </tr>
         <tr>
-            <td id="signoz--ingress"><a href="./values.yaml#L928">signoz.ingress</a></td>
+            <td id="o11y--ingress"><a href="./values.yaml#L928">o11y.ingress</a></td>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">annotations: {}
 className: ""
 enabled: false
 hosts:
-    - host: signoz.domain.com
+    - host: o11y.domain.com
       paths:
         - path: /
           pathType: ImplementationSpecific
@@ -598,7 +598,7 @@ hosts:
 tls: []</pre>
 </div>
             </td>
-            <td>Ingress configuration for SigNoz.</td>
+            <td>Ingress configuration for Hanzo O11y.</td>
         </tr>
     </tbody>
 </table>
@@ -633,7 +633,7 @@ tls: []</pre>
             <td id="telemetryStoreMigrator--name"><a href="./values.yaml#L1018">telemetryStoreMigrator.name</a></td>
             <td>string</td>
             <td>
-                <div style="max-width: 300px;"><pre lang="yaml">signoz-telemetrystore-migrator</pre>
+                <div style="max-width: 300px;"><pre lang="yaml">o11y-telemetrystore-migrator</pre>
 </div>
             </td>
             <td>The name of the Telemetry Store Migrator component.</td>
@@ -791,7 +791,7 @@ name: null</pre>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">extraArgs: null
-name: /signoz-otel-collector</pre>
+name: /o11y-otel-collector</pre>
 </div>
             </td>
             <td>Configuration for the Otel Collector executable.</td>
@@ -1298,7 +1298,7 @@ servicePort: 8082</pre>
                 <div style="max-width: 300px;"><pre lang="yaml">false</pre>
 </div>
             </td>
-            <td>Enable or disable the PostgreSQL for signoz. For more details, check out the postgresql chart: https://github.com/SigNoz/charts/tree/main/charts/postgresql</td>
+            <td>Enable or disable the PostgreSQL for o11y. For more details, check out the postgresql chart: https://github.com/Hanzo O11y/charts/tree/main/charts/postgresql</td>
         </tr>
     </tbody>
 </table>
@@ -1312,18 +1312,18 @@ servicePort: 8082</pre>
     </thead>
     <tbody>
         <tr>
-            <td id="signoz-otel-gateway"><a href="./values.yaml#L1725">signoz-otel-gateway</a></td>
+            <td id="o11y-otel-gateway"><a href="./values.yaml#L1725">o11y-otel-gateway</a></td>
             <td>object</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">enabled: false
 strategy: ""</pre>
 </div>
             </td>
-            <td>This component is configurable with licensed version of SigNoz.</td>
+            <td>This component is configurable with licensed version of Hanzo O11y.</td>
         </tr>
     </tbody>
 </table>
-<h3>signoz-otel-gateway</h3>
+<h3>o11y-otel-gateway</h3>
 <table>
     <thead>
         <th>Key</th>
@@ -1333,7 +1333,7 @@ strategy: ""</pre>
     </thead>
     <tbody>
         <tr>
-            <td id="signoz-otel-gateway--strategy"><a href="./values.yaml#L1732">signoz-otel-gateway.strategy</a></td>
+            <td id="o11y-otel-gateway--strategy"><a href="./values.yaml#L1732">o11y-otel-gateway.strategy</a></td>
             <td>string</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">RollingUpdate</pre>
@@ -1359,7 +1359,7 @@ strategy: ""</pre>
                 <div style="max-width: 300px;"><pre lang="yaml">enabled: false</pre>
 </div>
             </td>
-            <td>This component is configurable with licensed version of SigNoz.</td>
+            <td>This component is configurable with licensed version of Hanzo O11y.</td>
         </tr>
     </tbody>
 </table>

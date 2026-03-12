@@ -2,22 +2,22 @@
 # PostgreSQL
 ![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 15.0.0](https://img.shields.io/badge/AppVersion-15.0.0-informational?style=flat-square)
 
-This Helm chart is installed as a subchart/dependency of the SigNoz Helm chart with default values.
+This Helm chart is installed as a subchart/dependency of the Hanzo O11y Helm chart with default values.
 
 ### TL;DR;
 
 ```sh
-helm repo add signoz https://charts.signoz.io
-helm install -n platform --create-namespace "my-release" signoz/postgresql
+helm repo add o11y https://charts.o11y.hanzo.ai
+helm install -n platform --create-namespace "my-release" o11y/postgresql
 ```
 
 ### Introduction
 
-SigNoz uses a relational database like SQLite, Postgres exclusively for storing metadata and control-plane information, such as organizations, users, dashboards, and configurations.
+Hanzo O11y uses a relational database like SQLite, Postgres exclusively for storing metadata and control-plane information, such as organizations, users, dashboards, and configurations.
 
 It does not replace ClickHouse, which remains necessary for storing and querying all observability telemetry data (traces, metrics, and logs).
 
-Refer to the documentation for a more detailed explanation of [Relational Database in Signoz](https://signoz.io/docs/manage/administrator-guide/configuration/relational-database/)
+Refer to the documentation for a more detailed explanation of [Relational Database in O11y](https://o11y.hanzo.ai/docs/manage/administrator-guide/configuration/relational-database/)
 
 ### Prerequisites
 
@@ -29,8 +29,8 @@ Refer to the documentation for a more detailed explanation of [Relational Databa
 To install the chart with the release name `my-release`:
 
 ```bash
-helm repo add signoz https://charts.signoz.io
-helm -n platform --create-namespace install "my-release" signoz/postgresql
+helm repo add o11y https://charts.o11y.hanzo.ai
+helm -n platform --create-namespace install "my-release" o11y/postgresql
 ```
 
 To uninstall/delete the `my-release` resources:
@@ -164,7 +164,7 @@ See the [Helm docs](https://helm.sh/docs/helm/helm_uninstall/) for documentation
 		<td id="auth--username"><a href="./values.yaml#L44">auth.username</a></td>
 		<td>string</td>
 		<td>
-			<div style="max-width: 300px;"><pre lang="yaml">signoz</pre>
+			<div style="max-width: 300px;"><pre lang="yaml">o11y</pre>
 </div>
 		</td>
 		<td>Username for the custom user to create.</td>
@@ -173,7 +173,7 @@ See the [Helm docs](https://helm.sh/docs/helm/helm_uninstall/) for documentation
 		<td id="auth--password"><a href="./values.yaml#L47">auth.password</a></td>
 		<td>string</td>
 		<td>
-			<div style="max-width: 300px;"><pre lang="yaml">signoz@123</pre>
+			<div style="max-width: 300px;"><pre lang="yaml">o11y@123</pre>
 </div>
 		</td>
 		<td>Password for the custom user to create. Ignored if `auth.existingSecret` is provided.</td>
@@ -452,7 +452,7 @@ See the [Helm docs](https://helm.sh/docs/helm/helm_uninstall/) for documentation
 		<td id="persistence--mountPath"><a href="./values.yaml#L158">persistence.mountPath</a></td>
 		<td>string</td>
 		<td>
-			<div style="max-width: 300px;"><pre lang="yaml">/signoz/postgresql</pre>
+			<div style="max-width: 300px;"><pre lang="yaml">/o11y/postgresql</pre>
 </div>
 		</td>
 		<td>Mount path for Postgres data.</td>
@@ -470,7 +470,7 @@ See the [Helm docs](https://helm.sh/docs/helm/helm_uninstall/) for documentation
 		<td id="persistence--dataDir"><a href="./values.yaml#L164">persistence.dataDir</a></td>
 		<td>string</td>
 		<td>
-			<div style="max-width: 300px;"><pre lang="yaml">/signoz/postgresql/data</pre>
+			<div style="max-width: 300px;"><pre lang="yaml">/o11y/postgresql/data</pre>
 </div>
 		</td>
 		<td>Data directory for Postgres data.</td>

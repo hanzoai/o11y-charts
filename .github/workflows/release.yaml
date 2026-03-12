@@ -30,7 +30,7 @@ jobs:
 
       - name: Add dependencies
         run: |
-          helm repo add signoz https://charts.signoz.io
+          helm repo add o11y https://charts.o11y.hanzo.ai
           helm repo add redpanda https://charts.redpanda.com
 
       - name: Run chart-releaser

@@ -1,7 +1,7 @@
-# Default values for signoz-otel-gateway.
+# Default values for o11y-otel-gateway.
 replicaCount: 1
 image:
-  repository: docker.io/signoz/signoz-otel-gateway
+  repository: docker.io/ghcr.io/hanzoai/o11y-otel-gateway
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -40,7 +40,7 @@ service:
       containerPort: 13133
       servicePort: 13133
       protocol: TCP
-    signoz-admin:
+    o11y-admin:
       enabled: true
       containerPort: 8001
       servicePort: 8001

@@ -5,10 +5,10 @@ debug: true
 charts:
   - charts/clickhouse
   - charts/k8s-infra
-  - charts/signoz
+  - charts/o11y
   - charts/postgresql
 check-version-increment: false
 helm-extra-args: --timeout 5m
 chart-repos:
-  - signoz=https://charts.signoz.io
+  - o11y=https://charts.o11y.hanzo.ai
   - redpanda=https://charts.redpanda.com

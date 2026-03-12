@@ -4,7 +4,7 @@ templates:
   - otel-deployment/configmap.yaml
 release:
   name: k8s-infra
-  namespace: signoz
+  namespace: o11y
 set:
   presets:
     selfTelemetry:
@@ -73,7 +73,7 @@ tests:
                           compression: gzip
                           endpoint: ${env:OTEL_EXPORTER_OTLP_ENDPOINT}
                           headers:
-                            signoz-ingestion-key: ${env:SIGNOZ_SELF_TELEMETRY_API_KEY}
+                            o11y-ingestion-key: ${env:HANZO_SELF_TELEMETRY_API_KEY}
                           insecure: true
                           protocol: http/protobuf
                 resource:
@@ -90,7 +90,7 @@ tests:
                           compression: gzip
                           endpoint: ${env:OTEL_EXPORTER_OTLP_ENDPOINT}
                           headers:
-                            signoz-ingestion-key: ${env:SIGNOZ_SELF_TELEMETRY_API_KEY}
+                            o11y-ingestion-key: ${env:HANZO_SELF_TELEMETRY_API_KEY}
                           insecure: true
                           protocol: http/protobuf
                   propagators:

@@ -3,22 +3,22 @@
 
 ![Version: 0.15.0](https://img.shields.io/badge/Version-0.15.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.139.0](https://img.shields.io/badge/AppVersion-0.139.0-informational?style=flat-square)
 
-Monitoring your Kubernetes cluster is essential for ensuring performance, stability, and reliability. The SigNoz k8s-infra Helm chart provides a comprehensive solution for collecting and analyzing metrics, logs, and events from your entire Kubernetes environment.
+Monitoring your Kubernetes cluster is essential for ensuring performance, stability, and reliability. The Hanzo O11y k8s-infra Helm chart provides a comprehensive solution for collecting and analyzing metrics, logs, and events from your entire Kubernetes environment.
 
 ### TL;DR;
 
 ```sh
-helm repo add signoz https://charts.signoz.io
-helm install -n platform --create-namespace "my-release" signoz/k8s-infra
+helm repo add o11y https://charts.o11y.hanzo.ai
+helm install -n platform --create-namespace "my-release" o11y/k8s-infra
 ```
 
 ### Introduction
 
 The `k8s-infra` chart provides Kubernetes infrastructure observability by deploying OpenTelemetry components and related resources using the [Helm](https://helm.sh) package manager.
 
-It enables collection of metrics, logs, and events from your Kubernetes cluster, making it easier to monitor and troubleshoot your infrastructure with SigNoz.
+It enables collection of metrics, logs, and events from your Kubernetes cluster, making it easier to monitor and troubleshoot your infrastructure with Hanzo O11y.
 
-Refer to the documentation for a more detailed explanation of [k8s-infra](https://signoz.io/docs/collection-agents/k8s/k8s-infra/overview/)
+Refer to the documentation for a more detailed explanation of [k8s-infra](https://o11y.hanzo.ai/docs/collection-agents/k8s/k8s-infra/overview/)
 ### Prerequisites
 
 - Kubernetes 1.16+
@@ -29,8 +29,8 @@ Refer to the documentation for a more detailed explanation of [k8s-infra](https:
 To install the chart with the release name `my-release`:
 
 ```bash
-helm repo add signoz https://charts.signoz.io
-helm -n platform --create-namespace install "my-release" signoz/k8s-infra
+helm repo add o11y https://charts.o11y.hanzo.ai
+helm -n platform --create-namespace install "my-release" o11y/k8s-infra
 ```
 
 These commands deploy K8s-infra on the Kubernetes cluster in the default configuration.
@@ -66,7 +66,7 @@ The [Configuration](#configuration) section lists the parameters that can be con
 >     root_path: ""
 > ```
 >
-> After completing these steps, you can proceed with the [standard k8s-infra installation](https://github.com/SigNoz/charts/tree/main/charts/k8s-infra#installing-the-chart).
+> After completing these steps, you can proceed with the [standard k8s-infra installation](https://github.com/Hanzo O11y/charts/tree/main/charts/k8s-infra#installing-the-chart).
 
 > [!NOTE]
 > The `kubeletstats` receiver connects to the kubelet API to collect node and container metrics. 
@@ -111,7 +111,7 @@ kubectl delete namespace platform
 > - Upgraded the OpenTelemetry Collector to version `0.139.0`
 > - Removed deprecated variables from the OpenTelemetry Collector configuration to ensure compatibility with the latest version
 >
-> Please refer to the [upgrade guide](https://signoz.io/docs/opentelemetry-collection-agents/k8s/k8s-infra/user-guides/upgrade-k8s-infra-v0.15) for detailed instructions on upgrading k8s-infra to v0.15.0
+> Please refer to the [upgrade guide](https://o11y.hanzo.ai/docs/opentelemetry-collection-agents/k8s/k8s-infra/user-guides/upgrade-k8s-infra-v0.15) for detailed instructions on upgrading k8s-infra to v0.15.0
 >
 >
 > #### Version 0.14.1
@@ -286,7 +286,7 @@ storageClass: null</pre>
                 <div style="max-width: 300px;"><pre lang="yaml">null</pre>
 </div>
             </td>
-            <td>Endpoint/IP Address of the SigNoz or any other OpenTelemetry backend. Set it to `ingest.signoz.io:4317` for SigNoz Cloud. If set to null and the chart is installed as a dependency, it will attempt to autogenerate the endpoint of the SigNoz OtelCollector.</td>
+            <td>Endpoint/IP Address of the Hanzo O11y or any other OpenTelemetry backend. Set it to `ingest.o11y.hanzo.ai:4317` for Hanzo O11y Cloud. If set to null and the chart is installed as a dependency, it will attempt to autogenerate the endpoint of the Hanzo O11y OtelCollector.</td>
         </tr>
         <tr>
             <td id="otelInsecure"><a href="./values.yaml#L46">otelInsecure</a></td>
@@ -327,13 +327,13 @@ storageClass: null</pre>
     </thead>
     <tbody>
         <tr>
-            <td id="signozApiKey"><a href="./values.yaml#L52">signozApiKey</a></td>
+            <td id="o11yApiKey"><a href="./values.yaml#L52">o11yApiKey</a></td>
             <td>string</td>
             <td>
                 <div style="max-width: 300px;"><pre lang="yaml">""</pre>
 </div>
             </td>
-            <td>API key for SigNoz Cloud.</td>
+            <td>API key for Hanzo O11y Cloud.</td>
         </tr>
         <tr>
             <td id="apiKeyExistingSecretName"><a href="./values.yaml#L55">apiKeyExistingSecretName</a></td>
@@ -422,7 +422,7 @@ storageClass: null</pre>
         </tr>
     </tbody>
 </table><h3>Presets Configuration</h3>
-  <p>Presets to easily set up OtelCollector configurations. For more details, see the <a href="https://signoz.io/docs/collection-agents/k8s/k8s-infra/configure-k8s-infra/">documentation</a>.</p>
+  <p>Presets to easily set up OtelCollector configurations. For more details, see the <a href="https://o11y.hanzo.ai/docs/collection-agents/k8s/k8s-infra/configure-k8s-infra/">documentation</a>.</p>
 <h4>Debug Exporter Presets</h4>
 <table>
     <thead>
@@ -533,7 +533,7 @@ logs:
     enabled: false
 metrics:
     enabled: false
-signozApiKey: ""
+o11yApiKey: ""
 traces:
     enabled: false</pre>
 </div>
@@ -1270,7 +1270,7 @@ namespaces:
 pods:
     - hotrod
     - locust
-signozLogs: true</pre>
+o11yLogs: true</pre>
 </div>
             </td>
             <td>Exclude certain log files from being collected.</td>
@@ -1284,7 +1284,7 @@ containers: []
 enabled: false
 namespaces: []
 pods: []
-signozLogs: true</pre>
+o11yLogs: true</pre>
 </div>
             </td>
             <td>Whitelist certain log files to be collected. If enabled, `include` is ignored.</td>
@@ -1496,7 +1496,7 @@ signozLogs: true</pre>
 - k8s.volume.type</pre>
 </div>
             </td>
-            <td>List of extra metadata labels to collect. For GCP/GKE clusters, extraMetadataLabels may not be available due to kubelet configuration. See documentation for details: https://signoz.io/docs/opentelemetry-collection-agents/k8s/k8s-infra/user-guides/k8s-infra-kubelet-autogke/</td>
+            <td>List of extra metadata labels to collect. For GCP/GKE clusters, extraMetadataLabels may not be available due to kubelet configuration. See documentation for details: https://o11y.hanzo.ai/docs/opentelemetry-collection-agents/k8s/k8s-infra/user-guides/k8s-infra-kubelet-autogke/</td>
         </tr>
         <tr>
             <td id="presets--kubeletMetrics--metricGroups"><a href="./values.yaml#L367">presets.kubeletMetrics.metricGroups</a></td>
@@ -1544,7 +1544,7 @@ k8s.pod.uptime:
     enabled: true</pre>
 </div>
             </td>
-            <td>Fine-grained control over which Kubelet metrics are enabled. Note: In GKE Autopilot clusters ("gcp/autogke"), request and limit metrics are not available to scrape due to Kubelet configuration. Check out the documentation for more details: https://signoz.io/docs/opentelemetry-collection-agents/k8s/k8s-infra/user-guides/k8s-infra-kubelet-autogke/</td>
+            <td>Fine-grained control over which Kubelet metrics are enabled. Note: In GKE Autopilot clusters ("gcp/autogke"), request and limit metrics are not available to scrape due to Kubelet configuration. Check out the documentation for more details: https://o11y.hanzo.ai/docs/opentelemetry-collection-agents/k8s/k8s-infra/user-guides/k8s-infra-kubelet-autogke/</td>
         </tr>
     </tbody>
 </table>
@@ -1761,7 +1761,7 @@ k8s.pod.status_reason:
             <td id="presets--prometheus"><a href="./values.yaml#L499">presets.prometheus</a></td>
             <td>object</td>
             <td>
-                <div style="max-width: 300px;"><pre lang="yaml">annotationsPrefix: signoz.io
+                <div style="max-width: 300px;"><pre lang="yaml">annotationsPrefix: o11y.hanzo.ai
 enabled: false
 includeContainerName: false
 includePodLabel: false
@@ -1786,10 +1786,10 @@ scrapeInterval: 60s</pre>
             <td id="presets--prometheus--annotationsPrefix"><a href="./values.yaml#L505">presets.prometheus.annotationsPrefix</a></td>
             <td>string</td>
             <td>
-                <div style="max-width: 300px;"><pre lang="yaml">signoz.io</pre>
+                <div style="max-width: 300px;"><pre lang="yaml">o11y.hanzo.ai</pre>
 </div>
             </td>
-            <td>Prefix for the pod annotations used for metrics scraping (e.g., `signoz.io`).</td>
+            <td>Prefix for the pod annotations used for metrics scraping (e.g., `o11y.hanzo.ai`).</td>
         </tr>
         <tr>
             <td id="presets--prometheus--scrapeInterval"><a href="./values.yaml#L508">presets.prometheus.scrapeInterval</a></td>

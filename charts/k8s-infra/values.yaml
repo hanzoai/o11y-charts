@@ -34,11 +34,11 @@ enabled: true
 # clusterName -- Name of the K8s cluster. Used by OtelCollectors to attach in telemetry data.
 # @section -- General Configuration
 clusterName: ""
-# otelCollectorEndpoint -- Endpoint/IP Address of the SigNoz or any other OpenTelemetry backend.
+# otelCollectorEndpoint -- Endpoint/IP Address of the Hanzo O11y or any other OpenTelemetry backend.
 # @section -- General Configuration
-# Set it to `ingest.signoz.io:4317` for SigNoz Cloud.
+# Set it to `ingest.o11y.hanzo.ai:4317` for Hanzo O11y Cloud.
 # If set to null and the chart is installed as a dependency, it will attempt
-# to autogenerate the endpoint of the SigNoz OtelCollector.
+# to autogenerate the endpoint of the Hanzo O11y OtelCollector.
 otelCollectorEndpoint: null
 # otelInsecure -- Whether the OTLP endpoint is insecure.
 # @section -- General Configuration
@@ -47,9 +47,9 @@ otelInsecure: true
 # insecureSkipVerify -- Whether to skip verifying the OTLP endpoint's certificate.
 # @section -- General Configuration
 insecureSkipVerify: false
-# signozApiKey -- API key for SigNoz Cloud.
+# o11yApiKey -- API key for Hanzo O11y Cloud.
 # @section -- API Key Configuration
-signozApiKey: ""
+o11yApiKey: ""
 # apiKeyExistingSecretName -- Existing secret name to be used for the API key.
 # @section -- API Key Configuration
 apiKeyExistingSecretName: ""
@@ -86,7 +86,7 @@ namespace: ""
 # presets -- Presets to easily set up OtelCollector configurations.
 # @section -- Presets Configuration
 # @default -- "Please check out the values.yml for default values"
-# For more details, see the <a href="https://signoz.io/docs/collection-agents/k8s/k8s-infra/configure-k8s-infra/">documentation</a>
+# For more details, see the <a href="https://o11y.hanzo.ai/docs/collection-agents/k8s/k8s-infra/configure-k8s-infra/">documentation</a>
 presets:
   # presets.debugExporter -- Configuration for the debug exporter, used for debugging telemetry data.
   # @section -- Debug Exporter Presets
@@ -131,9 +131,9 @@ presets:
     # presets.selfTelemetry.insecureSkipVerify - Whether to skip verifying the certificate for self-telemetry.
     # @section -- Self Telemetry Presets
     insecureSkipVerify: true
-    # presets.selfTelemetry.signozApiKey - API key for SigNoz Cloud for self-telemetry.
+    # presets.selfTelemetry.o11yApiKey - API key for Hanzo O11y Cloud for self-telemetry.
     # @section -- Self Telemetry Presets
-    signozApiKey: ""
+    o11yApiKey: ""
     # presets.selfTelemetry.apiKeyExistingSecretName - Existing secret name for the self-telemetry API key.
     # @section -- Self Telemetry Presets
     apiKeyExistingSecretName: ""
@@ -191,9 +191,9 @@ presets:
       # presets.logsCollection.blacklist.enabled - Enable the blacklist.
       # @section -- Logs Collection Presets
       enabled: true
-      # presets.logsCollection.blacklist.signozLogs - Exclude SigNoz's own logs.
+      # presets.logsCollection.blacklist.o11yLogs - Exclude Hanzo O11y's own logs.
       # @section -- Logs Collection Presets
-      signozLogs: true
+      o11yLogs: true
       # presets.logsCollection.blacklist.namespaces - List of namespaces to exclude from log collection.
       # @section -- Logs Collection Presets
       namespaces:
@@ -215,9 +215,9 @@ presets:
       # presets.logsCollection.whitelist.enabled - Enable the whitelist.
       # @section -- Logs Collection Presets
       enabled: false
-      # presets.logsCollection.whitelist.signozLogs - Include SigNoz's own logs.
+      # presets.logsCollection.whitelist.o11yLogs - Include Hanzo O11y's own logs.
       # @section -- Logs Collection Presets
-      signozLogs: true
+      o11yLogs: true
       # presets.logsCollection.whitelist.namespaces - List of namespaces to include in log collection.
       # @section -- Logs Collection Presets
       namespaces: []
@@ -357,7 +357,7 @@ presets:
     insecureSkipVerify: true
     # presets.kubeletMetrics.extraMetadataLabels -- List of extra metadata labels to collect.
     # For GCP/GKE clusters, extraMetadataLabels may not be available due to kubelet configuration.
-    # See documentation for details: https://signoz.io/docs/opentelemetry-collection-agents/k8s/k8s-infra/user-guides/k8s-infra-kubelet-autogke/
+    # See documentation for details: https://o11y.hanzo.ai/docs/opentelemetry-collection-agents/k8s/k8s-infra/user-guides/k8s-infra-kubelet-autogke/
     # @section -- Kubelet Metrics Presets
     extraMetadataLabels:
       - container.id
@@ -371,7 +371,7 @@ presets:
       - volume
     # presets.kubeletMetrics.metrics -- Fine-grained control over which Kubelet metrics are enabled.
     # Note: In GKE Autopilot clusters ("gcp/autogke"), request and limit metrics are not available to scrape due to Kubelet configuration.
-    # Check out the documentation for more details: https://signoz.io/docs/opentelemetry-collection-agents/k8s/k8s-infra/user-guides/k8s-infra-kubelet-autogke/
+    # Check out the documentation for more details: https://o11y.hanzo.ai/docs/opentelemetry-collection-agents/k8s/k8s-infra/user-guides/k8s-infra-kubelet-autogke/
     # @section -- Kubelet Metrics Presets
     metrics:
       k8s.node.cpu.usage:
@@ -500,9 +500,9 @@ presets:
     # presets.prometheus.enabled -- Enable Prometheus metrics scraping.
     # @section -- Prometheus Metrics Presets
     enabled: false
-    # presets.prometheus.annotationsPrefix -- Prefix for the pod annotations used for metrics scraping (e.g., `signoz.io`).
+    # presets.prometheus.annotationsPrefix -- Prefix for the pod annotations used for metrics scraping (e.g., `o11y.hanzo.ai`).
     # @section -- Prometheus Metrics Presets
-    annotationsPrefix: signoz.io
+    annotationsPrefix: o11y.hanzo.ai
     # presets.prometheus.scrapeInterval -- How often to scrape metrics.
     # @section -- Prometheus Metrics Presets
     scrapeInterval: 60s
@@ -624,9 +624,9 @@ otelAgent:
   # otelAgent.podAnnotations -- Annotations for the OtelAgent pods.
   # @section -- OpenTelemetry Agent (DaemonSet)
   podAnnotations: {}
-    # signoz.io/scrape: 'true'
-    # signoz.io/port: '8888'
-    # signoz.io/path: /metrics
+    # o11y.hanzo.ai/scrape: 'true'
+    # o11y.hanzo.ai/port: '8888'
+    # o11y.hanzo.ai/path: /metrics
 
   # otelAgent.additionalEnvs -- Additional environment variables for the OtelAgent container.
   # @section -- OpenTelemetry Agent (DaemonSet)
@@ -1084,9 +1084,9 @@ otelDeployment:
   # otelDeployment.podAnnotations -- Annotations for the OtelDeployment pods.
   # @section -- OpenTelemetry Deployment
   podAnnotations: {}
-    # signoz.io/scrape: 'true'
-    # signoz.io/port: '8888'
-    # signoz.io/path: /metrics
+    # o11y.hanzo.ai/scrape: 'true'
+    # o11y.hanzo.ai/port: '8888'
+    # o11y.hanzo.ai/path: /metrics
 
   # otelDeployment.additionalEnvs -- Additional environment variables for the OtelDeployment container.
   # @section -- OpenTelemetry Deployment

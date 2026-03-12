@@ -4,12 +4,12 @@ templates:
   - otel-agent/configmap.yaml
 release:
   name: k8s-infra
-  namespace: signoz
+  namespace: o11y
 set:
   presets:
     selfTelemetry:
       endpoint: myhost:443
-      signozApiKey: myapikey
+      o11yApiKey: myapikey
       traces:
         enabled: true
       metrics:
@@ -48,7 +48,7 @@ tests:
               otlphttp/self_telemetry:
                 endpoint: myhost:443
                 headers:
-                  signoz-ingestion-key: ${env:SIGNOZ_SELF_TELEMETRY_API_KEY}
+                  o11y-ingestion-key: ${env:HANZO_SELF_TELEMETRY_API_KEY}
                 tls:
                   insecure: true
                   insecure_skip_verify: true
@@ -70,7 +70,7 @@ tests:
             receivers:
               filelog/self_logs:
                 include:
-                - /var/log/pods/signoz_k8s-infra*-k8s-infra-*/*/*.log
+                - /var/log/pods/o11y_k8s-infra*-k8s-infra-*/*/*.log
                 include_file_name: false
                 include_file_path: true
                 operators:
@@ -109,7 +109,7 @@ tests:
                           compression: gzip
                           endpoint: myhost:443
                           headers:
-                            signoz-ingestion-key: ${env:SIGNOZ_SELF_TELEMETRY_API_KEY}
+                            o11y-ingestion-key: ${env:HANZO_SELF_TELEMETRY_API_KEY}
                           insecure: true
                           protocol: http/protobuf
                 resource:
@@ -126,7 +126,7 @@ tests:
                           compression: gzip
                           endpoint: myhost:443
                           headers:
-                            signoz-ingestion-key: ${env:SIGNOZ_SELF_TELEMETRY_API_KEY}
+                            o11y-ingestion-key: ${env:HANZO_SELF_TELEMETRY_API_KEY}
                           insecure: true
                           protocol: http/protobuf
                   propagators:

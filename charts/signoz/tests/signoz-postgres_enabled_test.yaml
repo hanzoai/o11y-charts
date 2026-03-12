@@ -1,14 +1,14 @@
-suite: Test SigNoz Environment Variables and Volumes if PostgreSQL chart enabled
+suite: Test Hanzo O11y Environment Variables and Volumes if PostgreSQL chart enabled
 
 templates:
-  - templates/signoz/statefulset.yaml
+  - templates/o11y/statefulset.yaml
 
 release:
-  name: signoz
-  namespace: signoz
+  name: o11y
+  namespace: o11y
 
 tests:
-  - it: should render the Environment variables for PostgreSQL in signoz statefulset if postgresql.enabled=true
+  - it: should render the Environment variables for PostgreSQL in o11y statefulset if postgresql.enabled=true
     set:
       postgresql:
         enabled: true
@@ -16,14 +16,14 @@ tests:
       - contains:
           path: spec.template.spec.containers[0].env
           content: 
-              name: SIGNOZ_SQLSTORE_PROVIDER
+              name: HANZO_SQLSTORE_PROVIDER
               value: postgres
-        template: templates/signoz/statefulset.yaml
+        template: templates/o11y/statefulset.yaml
       - contains:
           path: spec.template.spec.containers[0].env
           content:
             name: POSTGRES_USER
-            value: "signoz"
+            value: "o11y"
       - contains:
           path: spec.template.spec.containers[0].env
           content:
@@ -33,32 +33,32 @@ tests:
           path: spec.template.spec.containers[0].env
           content:
             name: POSTGRES_PASSWORD
-            value: "signoz123"
+            value: "o11y123"
       - contains:
           path: spec.template.spec.containers[0].env
           content:
             name: POSTGRES_DB
-            value: "signoz"
+            value: "o11y"
       - contains:
           path: spec.template.spec.containers[0].env
           content: 
-              name: SIGNOZ_SQLSTORE_POSTGRES_DSN
-              value: postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@signoz-postgresql:$(POSTGRES_PORT)/$(POSTGRES_DB)?sslmode=disable
-        template: templates/signoz/statefulset.yaml
+              name: HANZO_SQLSTORE_POSTGRES_DSN
+              value: postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@o11y-postgresql:$(POSTGRES_PORT)/$(POSTGRES_DB)?sslmode=disable
+        template: templates/o11y/statefulset.yaml
 
-  - it: SigNoz StatefulSet should NOT render volumeMounts when postgresql.enabled=true
+  - it: Hanzo O11y StatefulSet should NOT render volumeMounts when postgresql.enabled=true
     set:
       postgresql:
         enabled: true
-      signoz:
+      o11y:
         additionalVolumeMounts: []
     asserts:
       - lengthEqual:
           path: spec.template.spec.containers[0].volumeMounts
           count: 0
-        template: templates/signoz/statefulset.yaml
+        template: templates/o11y/statefulset.yaml
 
-  - it: should render the Environment variables for PostgreSQL in signoz statefulset if postgresql.enabled=true and postgres.fullNameOverride
+  - it: should render the Environment variables for PostgreSQL in o11y statefulset if postgresql.enabled=true and postgres.fullNameOverride
     set:
       postgresql:
         enabled: true
@@ -67,17 +67,17 @@ tests:
       - contains:
           path: spec.template.spec.containers[0].env
           content: 
-              name: SIGNOZ_SQLSTORE_PROVIDER
+              name: HANZO_SQLSTORE_PROVIDER
               value: postgres
-        template: templates/signoz/statefulset.yaml
+        template: templates/o11y/statefulset.yaml
       - contains:
           path: spec.template.spec.containers[0].env
           content: 
-              name: SIGNOZ_SQLSTORE_POSTGRES_DSN
+              name: HANZO_SQLSTORE_POSTGRES_DSN
               value: postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@does-not-matter:$(POSTGRES_PORT)/$(POSTGRES_DB)?sslmode=disable
-        template: templates/signoz/statefulset.yaml
+        template: templates/o11y/statefulset.yaml
   
-  - it: should render the Environment variables for PostgreSQL in signoz statefulset if postgresql.enabled=true and postgresql.nameOverride
+  - it: should render the Environment variables for PostgreSQL in o11y statefulset if postgresql.enabled=true and postgresql.nameOverride
     set:
       postgresql:
         enabled: true
@@ -86,12 +86,12 @@ tests:
       - contains:
           path: spec.template.spec.containers[0].env
           content: 
-              name: SIGNOZ_SQLSTORE_PROVIDER
+              name: HANZO_SQLSTORE_PROVIDER
               value: postgres
-        template: templates/signoz/statefulset.yaml
+        template: templates/o11y/statefulset.yaml
       - contains:
           path: spec.template.spec.containers[0].env
           content: 
-              name: SIGNOZ_SQLSTORE_POSTGRES_DSN
-              value: postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@signoz-does-not-matter:$(POSTGRES_PORT)/$(POSTGRES_DB)?sslmode=disable
-        template: templates/signoz/statefulset.yaml
+              name: HANZO_SQLSTORE_POSTGRES_DSN
+              value: postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@o11y-does-not-matter:$(POSTGRES_PORT)/$(POSTGRES_DB)?sslmode=disable
+        template: templates/o11y/statefulset.yaml

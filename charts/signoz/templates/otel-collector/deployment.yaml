@@ -63,7 +63,7 @@ spec:
           image: {{ include "otelCollector.image" . }}
           imagePullPolicy: {{ .Values.otelCollector.image.pullPolicy }}
           command:
-            - "/signoz-otel-collector"
+            - "/o11y-otel-collector"
           args:
             - "migrate"
             - "sync"

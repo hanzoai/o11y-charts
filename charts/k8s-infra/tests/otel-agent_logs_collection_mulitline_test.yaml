@@ -4,7 +4,7 @@ templates:
   - otel-agent/configmap.yaml
 release:
   name: k8s-infra
-  namespace: signoz
+  namespace: o11y
 set:
   presets:
     prometheus:
@@ -44,7 +44,7 @@ tests:
               otlphttp/self_telemetry:
                 endpoint: test-endpoint:4317
                 headers:
-                  signoz-ingestion-key: ${env:SIGNOZ_SELF_TELEMETRY_API_KEY}
+                  o11y-ingestion-key: ${env:HANZO_SELF_TELEMETRY_API_KEY}
                 tls:
                   insecure: true
                   insecure_skip_verify: true
@@ -66,8 +66,8 @@ tests:
             receivers:
               filelog/k8s:
                 exclude:
-                - /var/log/pods/signoz_k8s-infra*-signoz-*/*/*.log
-                - /var/log/pods/signoz_k8s-infra*-k8s-infra-*/*/*.log
+                - /var/log/pods/o11y_k8s-infra*-o11y-*/*/*.log
+                - /var/log/pods/o11y_k8s-infra*-k8s-infra-*/*/*.log
                 - /var/log/pods/kube-system_*/*/*.log
                 - /var/log/pods/*_hotrod*_*/*/*.log
                 - /var/log/pods/*_locust*_*/*/*.log
@@ -81,7 +81,7 @@ tests:
                 start_at: end
               filelog/self_logs:
                 include:
-                - /var/log/pods/signoz_k8s-infra*-k8s-infra-*/*/*.log
+                - /var/log/pods/o11y_k8s-infra*-k8s-infra-*/*/*.log
                 include_file_name: false
                 include_file_path: true
                 operators:
@@ -126,7 +126,7 @@ tests:
               otlphttp/self_telemetry:
                 endpoint: test-endpoint:4317
                 headers:
-                  signoz-ingestion-key: ${env:SIGNOZ_SELF_TELEMETRY_API_KEY}
+                  o11y-ingestion-key: ${env:HANZO_SELF_TELEMETRY_API_KEY}
                 tls:
                   insecure: true
                   insecure_skip_verify: true
@@ -148,8 +148,8 @@ tests:
             receivers:
               filelog/k8s:
                 exclude:
-                - /var/log/pods/signoz_k8s-infra*-signoz-*/*/*.log
-                - /var/log/pods/signoz_k8s-infra*-k8s-infra-*/*/*.log
+                - /var/log/pods/o11y_k8s-infra*-o11y-*/*/*.log
+                - /var/log/pods/o11y_k8s-infra*-k8s-infra-*/*/*.log
                 - /var/log/pods/kube-system_*/*/*.log
                 - /var/log/pods/*_hotrod*_*/*/*.log
                 - /var/log/pods/*_locust*_*/*/*.log
@@ -165,7 +165,7 @@ tests:
                 start_at: end
               filelog/self_logs:
                 include:
-                - /var/log/pods/signoz_k8s-infra*-k8s-infra-*/*/*.log
+                - /var/log/pods/o11y_k8s-infra*-k8s-infra-*/*/*.log
                 include_file_name: false
                 include_file_path: true
                 multiline:
@@ -211,7 +211,7 @@ tests:
               otlphttp/self_telemetry:
                 endpoint: test-endpoint:4317
                 headers:
-                  signoz-ingestion-key: ${env:SIGNOZ_SELF_TELEMETRY_API_KEY}
+                  o11y-ingestion-key: ${env:HANZO_SELF_TELEMETRY_API_KEY}
                 tls:
                   insecure: true
                   insecure_skip_verify: true
@@ -233,8 +233,8 @@ tests:
             receivers:
               filelog/k8s:
                 exclude:
-                - /var/log/pods/signoz_k8s-infra*-signoz-*/*/*.log
-                - /var/log/pods/signoz_k8s-infra*-k8s-infra-*/*/*.log
+                - /var/log/pods/o11y_k8s-infra*-o11y-*/*/*.log
+                - /var/log/pods/o11y_k8s-infra*-k8s-infra-*/*/*.log
                 - /var/log/pods/kube-system_*/*/*.log
                 - /var/log/pods/*_hotrod*_*/*/*.log
                 - /var/log/pods/*_locust*_*/*/*.log
@@ -250,7 +250,7 @@ tests:
                 start_at: end
               filelog/self_logs:
                 include:
-                - /var/log/pods/signoz_k8s-infra*-k8s-infra-*/*/*.log
+                - /var/log/pods/o11y_k8s-infra*-k8s-infra-*/*/*.log
                 include_file_name: false
                 include_file_path: true
                 multiline:

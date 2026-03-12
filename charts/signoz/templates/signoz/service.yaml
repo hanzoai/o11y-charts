@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "signoz.fullname" . }}
+  name: {{ include "o11y.fullname" . }}
   labels:
-    {{- include "signoz.labels" . | nindent 4 }}
-{{- with .Values.signoz.service }}
+    {{- include "o11y.labels" . | nindent 4 }}
+{{- with .Values.o11y.service }}
 {{- if .labels }}
     {{- toYaml .labels | nindent 4 }}
 {{- end }}
@@ -17,7 +17,7 @@ spec:
   ports:
     - name: http
       port: {{ .port }}
-      {{- include "signoz.service.ifClusterIP" .type | indent 6 }}
+      {{- include "o11y.service.ifClusterIP" .type | indent 6 }}
       protocol: TCP
       targetPort: http
       {{- if (and (eq .type "NodePort") .nodePort) }}
@@ -25,7 +25,7 @@ spec:
       {{- end }}
     - name: http-internal
       port: {{ .internalPort }}
-      {{- include "signoz.service.ifClusterIP" .type | indent 6 }}
+      {{- include "o11y.service.ifClusterIP" .type | indent 6 }}
       protocol: TCP
       targetPort: http-internal
       {{- if (and (eq .type "NodePort") .internalNodePort) }}
@@ -33,7 +33,7 @@ spec:
       {{- end }}
     - name: opamp-internal
       port: {{ .opampPort }}
-      {{- include "signoz.service.ifClusterIP" .type | indent 6 }}
+      {{- include "o11y.service.ifClusterIP" .type | indent 6 }}
       protocol: TCP
       targetPort: opamp-internal
       {{- if (and (eq .type "NodePort") .opampInternalNodePort) }}
@@ -41,4 +41,4 @@ spec:
       {{- end }}
 {{- end }}
   selector:
-    {{- include "signoz.selectorLabels" . | nindent 4 }}
+    {{- include "o11y.selectorLabels" . | nindent 4 }}

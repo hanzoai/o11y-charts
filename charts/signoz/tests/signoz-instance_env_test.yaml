@@ -1,32 +1,32 @@
-suite: Test SigNoz Environment Variables
+suite: Test Hanzo O11y Environment Variables
 
 # We are testing the output of the StatefulSet template,
 # where the environment variables are defined.
 templates:
-  - templates/signoz/statefulset.yaml
+  - templates/o11y/statefulset.yaml
 
 tests:
   # --- Test Case 1: SMTP is explicitly disabled ---
   - it: should not render SMTP-specific variables when emailing is disabled
     set:
       # Set values to disable the SMTP feature
-      signoz:
+      o11y:
         env:
-          signoz_emailing_enabled: false
+          o11y_emailing_enabled: false
     asserts:
       # Assert that SMTP host variable is not present in the environment list.
       - notContains:
           path: spec.template.spec.containers[0].env
           content:
-            name: SIGNOZ_EMAILING_SMTP_HOST
+            name: HANZO_EMAILING_SMTP_HOST
 
   # --- Test Case 2: SMTP enabled with the new 'env' convention ---
   - it: should render SMTP variables correctly using the new 'env' convention
     set:
-      signoz:
+      o11y:
         env:
-          signoz_emailing_enabled: true
-          signoz_emailing_smtp_address:
+          o11y_emailing_enabled: true
+          o11y_emailing_smtp_address:
             valueFrom:
               secretKeyRef:
                 name: my-smtp-secret
@@ -35,12 +35,12 @@ tests:
       - contains:
           path: spec.template.spec.containers[0].env
           content:
-            name: SIGNOZ_EMAILING_ENABLED
+            name: HANZO_EMAILING_ENABLED
             value: "true"
       - contains:
           path: spec.template.spec.containers[0].env
           content:
-            name: SIGNOZ_EMAILING_SMTP_ADDRESS
+            name: HANZO_EMAILING_SMTP_ADDRESS
             valueFrom:
               secretKeyRef:
                 key: smtp-address
@@ -49,7 +49,7 @@ tests:
   # --- Test Case 3: SMTP enabled with the deprecated 'smtpVars' convention (Backward Compatibility) ---
   - it: should render SMTP variables correctly using the deprecated 'smtpVars' convention
     set:
-      signoz:
+      o11y:
         smtpVars:
           enabled: true
           existingSecret:
@@ -62,13 +62,13 @@ tests:
       - contains:
           path: spec.template.spec.containers[0].env
           content:
-            name: SIGNOZ_EMAILING_ENABLED
+            name: HANZO_EMAILING_ENABLED
             value: "true"
       # It should pull variables from the specified secret
       - contains:
           path: spec.template.spec.containers[0].env
           content:
-            name: SIGNOZ_EMAILING_SMTP_HOST
+            name: HANZO_EMAILING_SMTP_HOST
             valueFrom:
               secretKeyRef:
                 key: smtp-host
@@ -77,16 +77,16 @@ tests:
       - contains:
           path: spec.template.spec.containers[0].env
           content:
-            name: SIGNOZ_EMAILING_SMTP_ADDRESS
-            value: "$(SIGNOZ_EMAILING_SMTP_HOST):$(SIGNOZ_EMAILING_SMTP_PORT)"
+            name: HANZO_EMAILING_SMTP_ADDRESS
+            value: "$(HANZO_EMAILING_SMTP_HOST):$(HANZO_EMAILING_SMTP_PORT)"
 
   # --- Test Case 4: Test precedence for the 'enabled' flag ---
   - it: should prioritize 'env.smtp_emailing_enabled' over 'smtpVars.enabled'
     set:
-      signoz:
+      o11y:
         # This value from the new convention should WIN.
         env:
-          signoz_emailing_enabled: true
+          o11y_emailing_enabled: true
         # This value from the old convention should be IGNORED.
         smtpVars:
           enabled: false
@@ -98,13 +98,13 @@ tests:
       - contains:
           path: spec.template.spec.containers[0].env
           content:
-            name: SIGNOZ_EMAILING_ENABLED
+            name: HANZO_EMAILING_ENABLED
             value: "true"
 
   # --- Test Case 5: Test precedence for the SMTP address value ---
-  - it: should prioritize the address from 'env.signoz_emailing_smtp_address' over 'smtpVars'
+  - it: should prioritize the address from 'env.o11y_emailing_smtp_address' over 'smtpVars'
     set:
-      signoz:
+      o11y:
         # Define the SMTP address using the old 'smtpVars' convention
         smtpVars:
           enabled: true
@@ -114,25 +114,25 @@ tests:
             portKey: "smtp-port"
         # ALSO define the address using the new 'env' convention
         env:
-          signoz_emailing_enabled: true
-          signoz_emailing_smtp_address:
+          o11y_emailing_enabled: true
+          o11y_emailing_smtp_address:
             valueFrom:
               secretKeyRef:
                 name: my-smtp-secret
                 key: a-different-address # This value should WIN
     asserts:
-      # Assert that the address is constructed from 'env' (signoz_emailing_smtp_address),
+      # Assert that the address is constructed from 'env' (o11y_emailing_smtp_address),
       # make ensure the old convention for the address NOT takes priority.
       - notContains:
           path: spec.template.spec.containers[0].env
           content:
-            name: SIGNOZ_EMAILING_SMTP_ADDRESS
-            value: "$(SIGNOZ_EMAILING_SMTP_HOST):$(SIGNOZ_EMAILING_SMTP_PORT)"
+            name: HANZO_EMAILING_SMTP_ADDRESS
+            value: "$(HANZO_EMAILING_SMTP_HOST):$(HANZO_EMAILING_SMTP_PORT)"
       # proving the new convention's address is rendered.
       - contains:
           path: spec.template.spec.containers[0].env
           content:
-            name: SIGNOZ_EMAILING_SMTP_ADDRESS
+            name: HANZO_EMAILING_SMTP_ADDRESS
             valueFrom:
               secretKeyRef:
                 key: a-different-address
@@ -147,7 +147,7 @@ tests:
       - contains:
           path: spec.template.spec.containers[0].env
           content:
-            name: SIGNOZ_TELEMETRYSTORE_CLICKHOUSE_DSN
+            name: HANZO_TELEMETRYSTORE_CLICKHOUSE_DSN
             value: tcp://RELEASE-NAME-clickhouse:9000/?username=$(CLICKHOUSE_USER)&password=$(CLICKHOUSE_PASSWORD)
       - exists:
           path: spec.template.spec.containers[0].env[?(@.name == 'CLICKHOUSE_USER')]
@@ -188,7 +188,7 @@ tests:
       - contains:
           path: spec.template.spec.containers[0].env
           content:
-            name: SIGNOZ_TELEMETRYSTORE_CLICKHOUSE_DSN
+            name: HANZO_TELEMETRYSTORE_CLICKHOUSE_DSN
             value: tcp://sample.clickhouse.com:9000/?username=$(CLICKHOUSE_USER)&password=$(CLICKHOUSE_PASSWORD)
 
 # --- Test Case 8: External ClickHouse creds with secret and dsn environment variable ---
@@ -220,5 +220,5 @@ tests:
       - contains:
           path: spec.template.spec.containers[0].env
           content:
-            name: SIGNOZ_TELEMETRYSTORE_CLICKHOUSE_DSN
+            name: HANZO_TELEMETRYSTORE_CLICKHOUSE_DSN
             value: tcp://sample.clickhouse.com:9000/?username=$(CLICKHOUSE_USER)&password=$(CLICKHOUSE_PASSWORD)

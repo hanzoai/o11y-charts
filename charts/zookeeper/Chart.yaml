@@ -13,6 +13,6 @@ dependencies:
   - bitnami-common
   version: 0.0.1
 maintainers:
-- name: SigNoz
-  email: hello@signoz.io
-  url: https://signoz.io
+- name: Hanzo O11y
+  email: hello@o11y.hanzo.ai
+  url: https://o11y.hanzo.ai

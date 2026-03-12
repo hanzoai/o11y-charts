@@ -75,7 +75,7 @@ diagnosticMode:
 ##
 image:
   registry: docker.io
-  repository: signoz/zookeeper
+  repository: ghcr.io/hanzoai/zookeeper
   tag: 3.7.1
   digest: ""
   ## Specify a imagePullPolicy

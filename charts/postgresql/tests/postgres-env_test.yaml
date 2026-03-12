@@ -13,17 +13,17 @@ tests:
           path: spec.template.spec.containers[0].env
           content:
             name: POSTGRES_USER
-            value: "signoz"
+            value: "o11y"
       - contains:
           path: spec.template.spec.containers[0].env
           content:
             name: POSTGRES_PASSWORD
-            value: "signoz123"
+            value: "o11y123"
       - contains: 
           path: spec.template.spec.containers[0].env
           content: 
             name: POSTGRES_DB
-            value: "signoz"
+            value: "o11y"
       - contains:
           path: spec.template.spec.containers[0].env
           content:

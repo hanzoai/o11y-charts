@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "signoz-otel-gateway.fullname" . }}
+  name: {{ include "o11y-otel-gateway.fullname" . }}
   labels:
-    {{- include "signoz-otel-gateway.labels" . | nindent 4 }}
+    {{- include "o11y-otel-gateway.labels" . | nindent 4 }}
 data:
   config.yaml: |-
     {{- omit .Values.config "create" | toYaml | nindent 4 }}

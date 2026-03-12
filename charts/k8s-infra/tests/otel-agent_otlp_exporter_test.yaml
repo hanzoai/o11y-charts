@@ -42,7 +42,7 @@ tests:
               otlp:
                 endpoint: ${env:OTEL_EXPORTER_OTLP_ENDPOINT}
                 headers:
-                  signoz-access-token: ${env:SIGNOZ_API_KEY}
+                  o11y-access-token: ${env:HANZO_API_KEY}
                 tls:
                   insecure: true
                   insecure_skip_verify: false
@@ -110,7 +110,7 @@ tests:
               otlphttp:
                 endpoint: ${env:OTEL_EXPORTER_OTLP_ENDPOINT}
                 headers:
-                  signoz-access-token: ${env:SIGNOZ_API_KEY}
+                  o11y-access-token: ${env:HANZO_API_KEY}
                 tls:
                   insecure: true
                   insecure_skip_verify: false
